@@ -11,26 +11,19 @@ import {
 import { PostService } from './posts.service';
 import { UserService } from './users.service';
 import { User as UserModel, Post as PostModel } from '@prisma/client';
-
-interface ResponseData {
-  success: boolean;
-  message: string;
-  data: object;
-}
+import {
+  ResponseData,
+  BaseResponse,
+} from 'src/other_services/base.response.service';
 
 @Controller()
-export class UserAndPostController {
+export class UserAndPostController extends BaseResponse {
   constructor(
     private readonly userService: UserService,
     private readonly postService: PostService,
-  ) {}
-
-  successResponse: ResponseData = { success: true, message: '', data: null };
-  errorResponse: ResponseData = {
-    success: false,
-    message: 'Something went wrong',
-    data: null,
-  };
+  ) {
+    super();
+  }
 
   @Get('users')
   async getUsers(): Promise<ResponseData> {
