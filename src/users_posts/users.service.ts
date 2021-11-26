@@ -1,5 +1,7 @@
-import { Prisma, User } from '.prisma/client';
+import { Prisma } from '.prisma/client';
 import { Injectable } from '@nestjs/common';
+import { UserCreateInput } from 'src/@generated/prisma-nestjs-graphql/user/user-create.input';
+import { User } from 'src/@generated/prisma-nestjs-graphql/user/user.model';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
@@ -32,7 +34,7 @@ export class UserService {
     });
   }
 
-  async createUser(data: Prisma.UserCreateInput): Promise<User> {
+  async createUser(data: UserCreateInput): Promise<User> {
     return this.prisma.user.create({
       data,
     });

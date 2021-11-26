@@ -1,0 +1,30 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Post {
+  author: User
+  authorId: Int
+  content: String
+  id: ID!
+  published: Boolean
+  title: String!
+}
+
+type Query {
+  getPosts: [Post!]!
+  getUsers: [User!]!
+}
+
+type User {
+  _count: UserCount!
+  email: String!
+  id: ID!
+  name: String
+  phone: String
+  posts: [Post!]
+}
+
+type UserCount {
+  posts: Int!
+}

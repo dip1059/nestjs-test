@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Post, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import { Post } from 'src/@generated/prisma-nestjs-graphql/post/post.model';
+import { PostCreateInput } from 'src/@generated/prisma-nestjs-graphql/post/post-create.input';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
@@ -31,7 +33,7 @@ export class PostService {
     });
   }
 
-  async createPost(data: Prisma.PostCreateInput): Promise<Post> {
+  async createPost(data: PostCreateInput): Promise<Post> {
     return this.prisma.post.create({
       data,
     });
