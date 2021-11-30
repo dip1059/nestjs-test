@@ -2,6 +2,13 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Mutation {
+  createPost(post: PostCreateInput!): Post!
+  createUser(email: String!, name: String!): User!
+  deleteUser(id: Int!): User!
+  updateUser(id: Int!, name: String, phone: String): User!
+}
+
 type Post {
   author: User
   authorId: Int
@@ -11,9 +18,17 @@ type Post {
   title: String!
 }
 
+input PostCreateInput {
+  author: UserCreateNestedOneWithoutPostsInput
+  content: String
+  published: Boolean
+  title: String!
+}
+
 type Query {
   getPosts: [Post!]!
-  getUsers: [User!]!
+  getUser(id: Int!): User!
+  getUsers(first: Int, last: Int): [User!]!
 }
 
 type User {
@@ -27,4 +42,26 @@ type User {
 
 type UserCount {
   posts: Int!
+}
+
+input UserCreateNestedOneWithoutPostsInput {
+  connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutPostsInput
+  create: UserCreateWithoutPostsInput
+}
+
+input UserCreateOrConnectWithoutPostsInput {
+  create: UserCreateWithoutPostsInput!
+  where: UserWhereUniqueInput!
+}
+
+input UserCreateWithoutPostsInput {
+  email: String!
+  name: String
+  phone: String
+}
+
+input UserWhereUniqueInput {
+  email: String
+  id: Int
 }

@@ -6,22 +6,21 @@ import { UserCount } from './user-count.output';
 
 @ObjectType()
 export class User {
+  @Field(() => ID, { nullable: false })
+  id!: number;
 
-    @Field(() => ID, {nullable:false})
-    id!: number;
+  @Field(() => String, { nullable: false })
+  email!: string;
 
-    @Field(() => String, {nullable:false})
-    email!: string;
+  @Field(() => String, { nullable: true })
+  phone!: string | null;
 
-    @Field(() => String, {nullable:true})
-    phone!: string | null;
+  @Field(() => String, { nullable: true })
+  name!: string | null;
 
-    @Field(() => String, {nullable:true})
-    name!: string | null;
+  @Field(() => [Post], { nullable: true })
+  posts?: Array<Post>;
 
-    @Field(() => [Post], {nullable:true})
-    posts?: Array<Post>;
-
-    @Field(() => UserCount, {nullable:false})
-    _count?: UserCount;
+  @Field(() => UserCount, { nullable: false })
+  _count?: UserCount;
 }

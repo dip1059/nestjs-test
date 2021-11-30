@@ -7,16 +7,15 @@ import { PostWhereUniqueInput } from './post-where-unique.input';
 
 @InputType()
 export class PostCreateNestedManyWithoutAuthorInput {
+  @Field(() => [PostCreateWithoutAuthorInput], { nullable: true })
+  create?: Array<PostCreateWithoutAuthorInput>;
 
-    @Field(() => [PostCreateWithoutAuthorInput], {nullable:true})
-    create?: Array<PostCreateWithoutAuthorInput>;
+  @Field(() => [PostCreateOrConnectWithoutAuthorInput], { nullable: true })
+  connectOrCreate?: Array<PostCreateOrConnectWithoutAuthorInput>;
 
-    @Field(() => [PostCreateOrConnectWithoutAuthorInput], {nullable:true})
-    connectOrCreate?: Array<PostCreateOrConnectWithoutAuthorInput>;
+  @Field(() => PostCreateManyAuthorInputEnvelope, { nullable: true })
+  createMany?: PostCreateManyAuthorInputEnvelope;
 
-    @Field(() => PostCreateManyAuthorInputEnvelope, {nullable:true})
-    createMany?: PostCreateManyAuthorInputEnvelope;
-
-    @Field(() => [PostWhereUniqueInput], {nullable:true})
-    connect?: Array<PostWhereUniqueInput>;
+  @Field(() => [PostWhereUniqueInput], { nullable: true })
+  connect?: Array<PostWhereUniqueInput>;
 }

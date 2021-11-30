@@ -4,16 +4,15 @@ import { PostCreateNestedManyWithoutAuthorInput } from '../post/post-create-nest
 
 @InputType()
 export class UserCreateInput {
+  @Field(() => String, { nullable: false })
+  email!: string;
 
-    @Field(() => String, {nullable:false})
-    email!: string;
+  @Field(() => String, { nullable: true })
+  phone?: string;
 
-    @Field(() => String, {nullable:true})
-    phone?: string;
+  @Field(() => String, { nullable: true })
+  name?: string;
 
-    @Field(() => String, {nullable:true})
-    name?: string;
-
-    @Field(() => PostCreateNestedManyWithoutAuthorInput, {nullable:true})
-    posts?: PostCreateNestedManyWithoutAuthorInput;
+  @Field(() => PostCreateNestedManyWithoutAuthorInput, { nullable: true })
+  posts?: PostCreateNestedManyWithoutAuthorInput;
 }

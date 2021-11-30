@@ -4,16 +4,15 @@ import { Int } from '@nestjs/graphql';
 
 @InputType()
 export class PostCreateManyAuthorInput {
+  @Field(() => Int, { nullable: true })
+  id?: number;
 
-    @Field(() => Int, {nullable:true})
-    id?: number;
+  @Field(() => String, { nullable: false })
+  title!: string;
 
-    @Field(() => String, {nullable:false})
-    title!: string;
+  @Field(() => String, { nullable: true })
+  content?: string;
 
-    @Field(() => String, {nullable:true})
-    content?: string;
-
-    @Field(() => Boolean, {nullable:true})
-    published?: boolean;
+  @Field(() => Boolean, { nullable: true })
+  published?: boolean;
 }

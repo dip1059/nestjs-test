@@ -1,0 +1,76 @@
+query getUsers($getId: Int!, $skipUserPosts: Boolean! = false) {
+  user: getUser(id: $getId) {
+    ...user
+  }
+  users:getUsers {
+    ...user
+  }
+}
+
+query getPosts($skipUserPosts: Boolean! = true) {
+  # post: getPost(id: $getId) {
+  #   ...user
+  # }
+  posts:getPosts {
+    ...post
+  }
+}
+
+mutation createPost($post: PostCreateInput!, $skipUserPosts: Boolean! = false) {
+  post: createPost(post: $post) {
+    ...post
+  }
+}
+
+mutation createUser($name: String!, $email: String!, $skipUserPosts: Boolean! = false) {
+  user: createUser(name: $name, email: $email) {
+    ...user
+  }
+}
+
+mutation updateUser($upId: Int!, $phone: String, $skipUserPosts: Boolean! = false) {
+  user: updateUser(id: $upId, phone: $phone) {
+    ...user
+  }
+}
+
+mutation deleteUser($delId: Int!, $skipUserPosts: Boolean! = false) {
+  user: deleteUser(id: $delId) {
+    ...user
+  }
+}
+
+fragment posts on Post {
+  id, title, content, published
+}
+
+fragment user on User {
+  id, name, email, phone, posts {
+    ... posts @skip(if: $skipUserPosts)
+  }
+}
+
+fragment post on Post {
+  id, title, content, published, author { ...user }
+}
+
+
+######### Variables ##########
+
+{
+  "getId": 2,
+  "delId": 5,
+  "upId": 1,
+  "phone": "958787785",
+  "name": "Test3",
+  "email": "t3@yopmail.com" ,
+  "post": {
+    "title": "Happiness",
+    "content": "What is happiness? It's a mental state...",
+    "author": {
+      "connect": {
+        "id": 1
+      }
+    }
+  }
+}
