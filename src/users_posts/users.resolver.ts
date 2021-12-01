@@ -1,7 +1,7 @@
 import { Prisma } from '.prisma/client';
-import { Body } from '@nestjs/common';
 import {
   Args,
+  Context,
   Int,
   Mutation,
   Parent,
@@ -24,9 +24,12 @@ export class UsersResolver {
 
   @Query(() => [User])
   async getUsers(
+    @Context() context,
     @Args('first', { nullable: true, type: () => Int }) first?: number,
     @Args('last', { nullable: true, type: () => Int }) last?: number,
   ): Promise<User[]> {
+    console.log(context.req.headers.app_key);
+
     let sortOrder: Prisma.SortOrder;
     let take: number;
     if (first) {
