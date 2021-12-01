@@ -15,6 +15,7 @@ import {
   ResponseData,
   BaseResponse,
 } from 'src/other_services/base.response.service';
+import { UserCreateInput } from 'src/@generated/prisma-nestjs-graphql/user/user-create.input';
 
 @Controller()
 export class UserAndPostController extends BaseResponse {
@@ -34,9 +35,7 @@ export class UserAndPostController extends BaseResponse {
   }
 
   @Post('users')
-  async signupUser(
-    @Body() userData: { name?: string; email: string },
-  ): Promise<UserModel> {
+  async signupUser(@Body() userData: UserCreateInput): Promise<UserModel> {
     return this.userService.createUser(userData);
   }
 
@@ -100,6 +99,11 @@ export class UserAndPostController extends BaseResponse {
       where: { id: Number(id) },
       data: { published: true },
     });
+  }
+
+  @Delete('users/:id')
+  async deleteUser(@Param('id') id: string): Promise<UserModel> {
+    return this.userService.deleteUser({ id: Number(id) });
   }
 
   @Delete('posts/:id')

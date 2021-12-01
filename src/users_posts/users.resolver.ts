@@ -1,4 +1,5 @@
 import { Prisma } from '.prisma/client';
+import { Body } from '@nestjs/common';
 import {
   Args,
   Int,
@@ -9,6 +10,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { Post } from 'src/@generated/prisma-nestjs-graphql/post/post.model';
+import { UserCreateInput } from 'src/@generated/prisma-nestjs-graphql/user/user-create.input';
 import { User } from 'src/@generated/prisma-nestjs-graphql/user/user.model';
 import { PostService } from './posts.service';
 import { UserService } from './users.service';
@@ -40,9 +42,11 @@ export class UsersResolver {
     });
   }
 
-  @Query(() => User)
-  async getUser(@Args('id', { type: () => Int }) id: number): Promise<User> {
-    return this.userService.user({ id: id });
+  @Query(() => User, { nullable: true })
+  async getUser(
+    @Args('email', { type: () => String }) email: string,
+  ): Promise<User | null> {
+    return this.userService.user({ email: email });
   }
 
   @ResolveField(() => [Post])
@@ -53,10 +57,9 @@ export class UsersResolver {
 
   @Mutation(() => User)
   async createUser(
-    @Args('name', { type: () => String }) name: string,
-    @Args('email', { type: () => String }) email: string,
+    @Args('data', { type: () => UserCreateInput }) data: UserCreateInput,
   ): Promise<User> {
-    return this.userService.createUser({ name: name, email: email });
+    return this.userService.createUser(data);
   }
 
   @Mutation(() => User)
@@ -72,7 +75,9 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
-  async deleteUser(@Args('id', { type: () => Int }) id: number): Promise<User> {
-    return this.userService.deleteUser({ id: id });
+  async deleteUser(
+    @Args('email', { type: () => String }) email: string,
+  ): Promise<User> {
+    return this.userService.deleteUser({ email: email });
   }
 }

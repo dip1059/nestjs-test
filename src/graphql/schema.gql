@@ -4,8 +4,8 @@
 
 type Mutation {
   createPost(post: PostCreateInput!): Post!
-  createUser(email: String!, name: String!): User!
-  deleteUser(id: Int!): User!
+  createUser(data: UserCreateInput!): User!
+  deleteUser(email: String!): User!
   updateUser(id: Int!, name: String, phone: String): User!
 }
 
@@ -25,9 +25,43 @@ input PostCreateInput {
   title: String!
 }
 
+input PostCreateManyAuthorInput {
+  content: String
+  id: Int
+  published: Boolean
+  title: String!
+}
+
+input PostCreateManyAuthorInputEnvelope {
+  data: [PostCreateManyAuthorInput!]!
+  skipDuplicates: Boolean
+}
+
+input PostCreateNestedManyWithoutAuthorInput {
+  connect: [PostWhereUniqueInput!]
+  connectOrCreate: [PostCreateOrConnectWithoutAuthorInput!]
+  create: [PostCreateWithoutAuthorInput!]
+  createMany: PostCreateManyAuthorInputEnvelope
+}
+
+input PostCreateOrConnectWithoutAuthorInput {
+  create: PostCreateWithoutAuthorInput!
+  where: PostWhereUniqueInput!
+}
+
+input PostCreateWithoutAuthorInput {
+  content: String
+  published: Boolean
+  title: String!
+}
+
+input PostWhereUniqueInput {
+  id: Int
+}
+
 type Query {
   getPosts: [Post!]!
-  getUser(id: Int!): User!
+  getUser(email: String!): User
   getUsers(first: Int, last: Int): [User!]!
 }
 
@@ -42,6 +76,13 @@ type User {
 
 type UserCount {
   posts: Int!
+}
+
+input UserCreateInput {
+  email: String!
+  name: String
+  phone: String
+  posts: PostCreateNestedManyWithoutAuthorInput
 }
 
 input UserCreateNestedOneWithoutPostsInput {

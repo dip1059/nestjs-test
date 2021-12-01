@@ -11,6 +11,8 @@ import { UserAndPostModule } from './users_posts/users_posts.module';
       sortSchema: true,
       installSubscriptionHandlers: true,
     }),
-    ProductModule, UserAndPostModule],
+    ProductModule,
+    UserAndPostModule,
+  ],
 })
 export class AppModule {}
