@@ -6,9 +6,14 @@ import { AppAuthMiddleware } from './middlewares/app-authentication.middleware';
 import { ProductModule } from './products/products.module';
 import { UserAndPostModule } from './users_posts/users_posts.module';
 import { LogviewerModule } from './logviewer/logviewer.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      exclude: ['/graphql*'],
+    }),
     GraphQLModule.forRootAsync({
       useFactory: () => ({
         autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),

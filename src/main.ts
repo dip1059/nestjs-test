@@ -52,8 +52,8 @@ async function bootstrap() {
   //using functional middleware
   //app.use(appAuth);
 
-  app.useStaticAssets(join(__dirname, '..', 'public'));
-  app.setBaseViewsDir(join(__dirname, '..', './src/views'));
+  //app.useStaticAssets(join(__dirname, '..', 'public'));
+  app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setViewEngine('hbs');
 
   await app.listen(process.env.APP_PORT || 3000);
