@@ -20,18 +20,26 @@
     <div class="row text-center pb-3">
       <h3 class="text-success">Logs</h4>
     </div>
+    <div class="row mb-5">
+      <a href="" class="col-1 btn btn-success m-2">Reload</a>
+      <a href="/logviewer/clean-file" class="col-1 btn btn-danger m-2">Clean File</a>
+    </div>
     <div class="row">
       <table class="table data_table">
         <thead class="thead-dark">
           <tr>
             <th>Time</th>
+            <th>File</th>
             <th>Message</th>
           </tr>
         </thead>
         <tbody>
           {{#each logs}}
           <tr>
-            <td>{{ this.time }}</td>
+            <td>
+              <script>document.write(new Date('{{ this.time }}'));</script>
+            </td>
+            <td>{{ this.fileInfo }}</td>
             <td>{{ this.message }}</td>
           </tr>
           {{/each}}
@@ -39,6 +47,7 @@
       </table>
     </div>
   </div>
+
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -51,7 +60,7 @@
   <script src="/js/jquery.dataTables.min.js"></script>
 
   <script>
-    $(".data_table").DataTable();
+    $(".data_table").DataTable({ order: [0, 'desc'] });
   </script>
 
 </body>

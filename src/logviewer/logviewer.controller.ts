@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Delete, Render } from '@nestjs/common';
+import { Controller, Get, Render, Query, Res } from '@nestjs/common';
 import { LogviewerService } from './logviewer.service';
 // import * as hbs from 'hbs';
 
@@ -13,12 +13,13 @@ export class LogviewerController {
 
   @Get()
   @Render('index')
-  findAll() {
-    return { logs: this.logviewerService.findAll() };
+  getLogs(@Query('file') file: string) {
+    return { logs: this.logviewerService.getLogs(file) };
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.logviewerService.remove(+id);
+  @Get('clean-file')
+  cleanFile(@Query('file') file: string, @Res() res) {
+    this.logviewerService.cleanFile(file);
+    return res.redirect('/logviewer');
   }
 }

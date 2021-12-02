@@ -5,7 +5,7 @@ query getUsers($skipUserPosts: Boolean! = false) {
 }
 
 query getUser($getEmail: String!, $skipUserPosts: Boolean! = false) {
-  users:getUser(email: $getEmail) {
+  user:getUser(email: $getEmail) {
     ...user
   }
 }

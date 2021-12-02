@@ -3,17 +3,26 @@ import * as fs from 'fs';
 
 @Injectable()
 export class LogviewerService {
-  findAll() {
-    let data = '[';
-    data += fs.readFileSync('./storage/logs/debug.log').toString();
-    data = data.slice(0, data.length - 2);
-    data += ']';
-    const logs = JSON.parse(data);
-    // console.log(typeof logs, 'only-console');
+  getLogs(file: string) {
+    let logs: object[];
+    if (!fs.existsSync(file)) return logs;
+    const log_file = file || './storage/logs/debug.log';
+    try {
+      let logData = fs.readFileSync(log_file).toString();
+      if (logData !== '') {
+        logData = logData.slice(0, logData.length - 2);
+        logData = `[${logData}]`;
+        logs = JSON.parse(logData);
+      }
+    } catch (error) {
+      fs.writeFileSync(log_file, '');
+      console.log(error.toString());
+    }
     return logs;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} logviewer`;
+  cleanFile(file = './storage/logs/debug.log') {
+    if (fs.existsSync(file)) fs.writeFileSync(file, '');
+    return;
   }
 }
