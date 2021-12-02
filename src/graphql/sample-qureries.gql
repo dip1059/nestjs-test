@@ -1,8 +1,11 @@
-query getUsers($getId: Int!, $skipUserPosts: Boolean! = false) {
-  user: getUser(id: $getId) {
+query getUsers($skipUserPosts: Boolean! = false) {
+  users:getUsers {
     ...user
   }
-  users:getUsers {
+}
+
+query getUser($getEmail: String!, $skipUserPosts: Boolean! = false) {
+  users:getUser(email: $getEmail) {
     ...user
   }
 }
@@ -22,8 +25,8 @@ mutation createPost($post: PostCreateInput!, $skipUserPosts: Boolean! = false) {
   }
 }
 
-mutation createUser($name: String!, $email: String!, $skipUserPosts: Boolean! = false) {
-  user: createUser(name: $name, email: $email) {
+mutation createUser($user: UserCreateInput!, $skipUserPosts: Boolean! = false) {
+  user: createUser(data: $user) {
     ...user
   }
 }
@@ -34,8 +37,8 @@ mutation updateUser($upId: Int!, $phone: String, $skipUserPosts: Boolean! = fals
   }
 }
 
-mutation deleteUser($delId: Int!, $skipUserPosts: Boolean! = false) {
-  user: deleteUser(id: $delId) {
+mutation deleteUser($delEmail: String!, $skipUserPosts: Boolean! = false) {
+  user: deleteUser(email: $delEmail) {
     ...user
   }
 }
@@ -55,15 +58,16 @@ fragment post on Post {
 }
 
 
-######### Variables ##########
-
+####variables
 {
-  "getId": 2,
-  "delId": 5,
+  "getEmail": "t3@yopmail",
+  "delEmail": "t3@yopmail",
   "upId": 1,
-  "phone": "958787785",
-  "name": "Test3",
-  "email": "t3@yopmail.com" ,
+  "user": {
+    "phone": "958787785",
+  	"name": "Test3",
+  	"email": "t3@yopmail.com" 
+  },
   "post": {
     "title": "Happiness",
     "content": "What is happiness? It's a mental state...",
@@ -73,4 +77,10 @@ fragment post on Post {
       }
     }
   }
+}
+
+
+###headers
+{
+  "app_key":"absaja"
 }

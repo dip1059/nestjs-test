@@ -5,6 +5,7 @@ import { join } from 'path';
 import { AppAuthMiddleware } from './middlewares/app-authentication.middleware';
 import { ProductModule } from './products/products.module';
 import { UserAndPostModule } from './users_posts/users_posts.module';
+import { LogviewerModule } from './logviewer/logviewer.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { UserAndPostModule } from './users_posts/users_posts.module';
     }),
     ProductModule,
     UserAndPostModule,
+    LogviewerModule,
   ],
 })
 export class AppModule implements NestModule {

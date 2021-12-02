@@ -4,19 +4,23 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { basename } from 'path';
+// import { basename } from 'path';
 
 @Injectable()
 export class AppAuthMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
-    console.log(
+    /* console.log(
       basename(__filename) +
         ':' +
         new Error().stack.split('\n')[1].split(':')[1], //line number
       req.headers['app_key'],
-    );
-
-    if (req.header('app_key') === process.env.APP_KEY) next();
+      'only-console',
+    ); */
+    if (
+      process.env.APP_DEBUG === 'true' ||
+      req.header('app_key') === process.env.APP_KEY
+    )
+      next();
     else
       throw new UnauthorizedException({
         success: false,
