@@ -1,9 +1,9 @@
 const fs = require('fs');
 
-async function collectLangKeys(file, funcSignature = '__') {
+function collectLangKeys(file, newKeys = [], funcSignature = '__()') {
+  funcSignature = funcSignature.split('(')[0];
   try {
     let data = '';
-    let newKeys = [];
     try {
       data = fs.readFileSync(file).toString();
     } catch {}
@@ -13,17 +13,25 @@ async function collectLangKeys(file, funcSignature = '__') {
       else
         dataArr = [
           ...data.matchAll(
-            new RegExp(`${funcSignature}[\'|\"](.*?)[\'|\"]\)`, 'g'),
+            new RegExp(`${funcSignature}\\([\\'|\\"](.*?)[\\'|\\"]\\)`, 'g'),
           ),
         ];
+
+      for (let i = 0; i < dataArr.length; i++) {
+        newKeys.push(dataArr[i][1]);
+      }
+      return newKeys;
     }
+    return newKeys;
   } catch (error) {
     console.log(error.toString());
+    return newKeys;
   }
 }
 
 async function writeLangfile(file, newKeys = []) {
   try {
+    let langKeys = {};
     let data = '';
     try {
       data = fs.readFileSync(file).toString();
@@ -31,8 +39,9 @@ async function writeLangfile(file, newKeys = []) {
     if (data !== '') {
       langKeys = JSON.parse(data);
     }
+
     if (newKeys.length) {
-      newKeys.forEach((elem, index, newKeys) => {
+      newKeys.forEach((elem) => {
         let found = false;
         for (key in langKeys) {
           if (key === elem) {
@@ -40,16 +49,16 @@ async function writeLangfile(file, newKeys = []) {
             break;
           }
         }
-        if (found) {
-          newKeys.splice(index, 1);
-        } else {
+        if (!found) {
+          global.count++;
           langKeys[elem] = '';
         }
       });
     }
+    fs.writeFileSync(file, String(JSON.stringify(langKeys)));
   } catch (error) {
     console.log(error.toString());
   }
 }
 
-exports.processDatafile = processDatafile;
+module.exports = { collectLangKeys, writeLangfile };

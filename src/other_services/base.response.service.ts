@@ -1,4 +1,4 @@
-import { __ } from 'src/helpers';
+import { __ } from '../helpers/helpers';
 
 export interface ResponseData {
   success: boolean;

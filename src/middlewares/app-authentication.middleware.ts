@@ -3,7 +3,7 @@ import {
   NestMiddleware,
   UnauthorizedException,
 } from '@nestjs/common';
-import { __ } from 'src/helpers';
+import { __ } from '../helpers/helpers';
 import { Request, Response, NextFunction } from 'express';
 
 @Injectable()
@@ -28,7 +28,7 @@ export class AppAuthMiddleware implements NestMiddleware {
 
 /* import { UnauthorizedException } from '@nestjs/common';
 import { NextFunction } from 'express';
-import { __ } from 'src/helpers';
+import { __ } from '../helpers/helpers';
 
 export function appAuth(req: Request, next: NextFunction) {
   if (
