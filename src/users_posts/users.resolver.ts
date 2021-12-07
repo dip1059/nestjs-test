@@ -28,8 +28,6 @@ export class UsersResolver {
     @Args('first', { nullable: true, type: () => Int }) first?: number,
     @Args('last', { nullable: true, type: () => Int }) last?: number,
   ): Promise<User[]> {
-    console.log(context.req.headers.app_key);
-
     let sortOrder: Prisma.SortOrder;
     let take: number;
     if (first) {

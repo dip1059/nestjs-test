@@ -16,7 +16,7 @@ import {
   BaseResponse,
 } from 'src/other_services/base.response.service';
 import { UserCreateInput } from 'src/@generated/prisma-nestjs-graphql/user/user-create.input';
-import { __ } from 'src/helpers';
+import { __ } from '../helpers/helpers';
 
 @Controller()
 export class UserAndPostController extends BaseResponse {
