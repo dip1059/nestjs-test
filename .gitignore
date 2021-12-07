@@ -36,3 +36,4 @@ lerna-debug.log*
 
 #Project Files
 .env
+/dev/node_modules
