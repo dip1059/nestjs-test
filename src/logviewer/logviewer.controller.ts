@@ -12,8 +12,9 @@ export class LogviewerController {
   constructor(private readonly logviewerService: LogviewerService) {}
 
   @Get()
-  @Render('index')
+  @Render('logviewer')
   getLogs(@Query('file') file: string) {
+    if (file === '') file = null;
     return { logs: this.logviewerService.getLogs(file) };
   }
 

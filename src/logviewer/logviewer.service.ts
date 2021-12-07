@@ -3,10 +3,11 @@ import * as fs from 'fs';
 
 @Injectable()
 export class LogviewerService {
-  getLogs(file: string) {
+  getLogs(file = 'debug.log') {
+    file = './storage/logs/' + file;
     let logs: object[];
     if (!fs.existsSync(file)) return logs;
-    const log_file = file || './storage/logs/debug.log';
+    const log_file = file || 'debug.log';
     try {
       let logData = fs.readFileSync(log_file).toString();
       if (logData !== '') {
@@ -21,7 +22,8 @@ export class LogviewerService {
     return logs;
   }
 
-  cleanFile(file = './storage/logs/debug.log') {
+  cleanFile(file = 'debug.log') {
+    file = './storage/logs/' + file;
     if (fs.existsSync(file)) fs.writeFileSync(file, '');
     return;
   }

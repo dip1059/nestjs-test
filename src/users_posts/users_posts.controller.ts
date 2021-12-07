@@ -16,6 +16,7 @@ import {
   BaseResponse,
 } from 'src/other_services/base.response.service';
 import { UserCreateInput } from 'src/@generated/prisma-nestjs-graphql/user/user-create.input';
+import { __ } from 'src/helpers';
 
 @Controller()
 export class UserAndPostController extends BaseResponse {
@@ -28,10 +29,9 @@ export class UserAndPostController extends BaseResponse {
 
   @Get('users')
   async getUsers(): Promise<ResponseData> {
-    this.successResponse.data = {
+    return this.successResponse({
       users: await this.userService.users({}),
-    };
-    return this.successResponse;
+    });
   }
 
   @Post('users')
@@ -43,10 +43,8 @@ export class UserAndPostController extends BaseResponse {
   async getUserById(@Param('email') email: string): Promise<ResponseData> {
     const user = await this.userService.user({ email: email });
     if (!user) {
-      this.errorResponse.message = 'User not found';
-      throw new NotFoundException(this.errorResponse);
-    } else this.successResponse.data = user;
-    return this.successResponse;
+      throw new NotFoundException(this.errorResponse(__('User not found')));
+    } else return this.successResponse(user);
   }
 
   @Get('posts/:id')
