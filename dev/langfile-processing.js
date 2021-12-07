@@ -1,6 +1,5 @@
 const fs = require('fs');
 
-
 async function collectLangKeys(file, funcSignature = '__') {
   try {
     let data = '';
@@ -9,18 +8,19 @@ async function collectLangKeys(file, funcSignature = '__') {
       data = fs.readFileSync(file).toString();
     } catch {}
     if (data !== '') {
-      /* let dataArr = [...data];
-      let start = 0;
-      dataArr.forEach((elem, index, dataArr) => {
-        
-      }); */
-      dataArr = data.match(/\_\_\((.*)\)/);
+      if (funcSignature === '__')
+        dataArr = [...data.matchAll(/\_\_\([\'|\"](.*?)[\'|\"]\)/g)];
+      else
+        dataArr = [
+          ...data.matchAll(
+            new RegExp(`${funcSignature}[\'|\"](.*?)[\'|\"]\)`, 'g'),
+          ),
+        ];
     }
   } catch (error) {
     console.log(error.toString());
   }
 }
-
 
 async function writeLangfile(file, newKeys = []) {
   try {
