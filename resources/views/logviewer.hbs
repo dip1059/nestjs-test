@@ -22,7 +22,7 @@
     </div>
     <div class="row mb-5">
       <a href="" class="col-1 btn btn-success m-2">Reload</a>
-      <a href="/logviewer/clean-file" class="col-1 btn btn-danger m-2">Clean File</a>
+      <a href="javascript:" onclick="cleanFile()" class="col-1 btn btn-danger m-2">Clean File</a>
     </div>
     <div class="row">
       <table class="table data_table">
@@ -37,7 +37,7 @@
           {{#each logs}}
           <tr>
             <td>
-              <script>document.write(new Date('{{ this.time }}'));</script>
+              <script>document.write(new Date('{{ this.time }}').toLocaleString());</script>
             </td>
             <td>{{ this.fileInfo }}</td>
             <td>{{ this.message }}</td>
@@ -61,6 +61,10 @@
 
   <script>
     $(".data_table").DataTable({ order: [0, 'desc'] });
+    function cleanFile(){
+      let r = confirm('Are you sure?');
+      if(r) location.href = '/logviewer/clean-file';
+    }
   </script>
 
 </body>
