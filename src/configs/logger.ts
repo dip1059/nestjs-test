@@ -10,14 +10,15 @@ export const LOG_LEVEL_WARN = 'warning';
 
 export function logger(file = 'debug.log') {
   const type = process.env.LOG_CHANNEL || LOG_CHANNEL_SINGLE;
-  if (type === LOG_CHANNEL_DAILY) {
-    file = `${new Date().toLocaleDateString()}_${file}`.replace('/', '-');
-    file = file.replace('/', '-');
+
+  /* if (type === LOG_CHANNEL_DAILY) {
+    file = `${new Date().toISOString().split('T')[0]}_${file}`;
   }
   const debug_log_file = `./storage/logs/${file}`;
   const debugFileWriteStream = fs.createWriteStream(debug_log_file, {
     flags: 'a',
-  });
+  }); */
+
   const log_stdout = process.stdout;
 
   //usage console.log(msg, level, file, outputType)
@@ -31,29 +32,37 @@ export function logger(file = 'debug.log') {
     };
     const opParmLen = optionalParams.length;
 
-    fs.writeFileSync('./storage/logs/debug.log', 'hello', { flag: 'a' });
+    // fs.writeFileSync('./storage/logs/debug.log', 'test\n', { flag: 'a' });
+
     //finding custom file name from last 2 index of optional Params
     let log_file: any;
     for (let i = opParmLen - 1; i > opParmLen - 2; i--) {
-      if (i < 1) {
-        log_file = debugFileWriteStream;
-        break;
-      }
-      const customFile: string = optionalParams[i] || '';
-      fs.writeFileSync('./storage/logs/debug.log', 'custom: ' + customFile);
+      if (i < 0) break;
+      const customFile = optionalParams[i] || '';
       if (isLogFile(customFile)) {
         log_file = fs.createWriteStream(`./storage/logs/${customFile}`, {
           flags: 'a',
         });
         break;
-      } else log_file = debugFileWriteStream;
+      }
+    }
+    //
+    if (!log_file) {
+      if (type === LOG_CHANNEL_DAILY) {
+        file = `${new Date().toISOString().split('T')[0]}_${file}`;
+      }
+      const debug_log_file = `./storage/logs/${file}`;
+      const debugFileWriteStream = fs.createWriteStream(debug_log_file, {
+        flags: 'a',
+      });
+      log_file = debugFileWriteStream;
     }
 
     //finding log level from last 3 index of optional Params
-    for (let i = opParmLen - 1; i < opParmLen - 3; i--) {
-      if (i < 1) break;
-      const logLevel: string = optionalParams[optionalParams.length - 3] ?? '';
-      if (logLevel === (LOG_LEVEL_ERROR || LOG_LEVEL_WARN)) {
+    for (let i = opParmLen - 1; i > opParmLen - 3; i--) {
+      if (i < 0) break;
+      const logLevel = optionalParams[i] || '';
+      if (logLevel === LOG_LEVEL_ERROR || logLevel === LOG_LEVEL_WARN) {
         log.level = logLevel;
         break;
       }

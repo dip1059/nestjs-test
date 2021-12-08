@@ -48,7 +48,7 @@ export class UsersResolver {
   async getUser(
     @Args('email', { type: () => String }) email: string,
   ): Promise<User | null> {
-    console.log('get user', 'user.log');
+    console.log('get user', 'api request', 'error', 'user.log');
     return this.userService.user({ email: email });
   }
 
