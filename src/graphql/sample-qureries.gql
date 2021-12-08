@@ -19,7 +19,7 @@ query getPosts($skipUserPosts: Boolean! = true) {
   }
 }
 
-mutation createPost($post: PostCreateInput!, $skipUserPosts: Boolean! = false) {
+mutation createPost($post: PostCreateInput!, $skipUserPosts: Boolean! = true) {
   post: createPost(post: $post) {
     ...post
   }

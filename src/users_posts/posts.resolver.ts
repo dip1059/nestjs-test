@@ -21,6 +21,7 @@ export class PostsResolver {
 
   @Query(() => [Post])
   async getPosts(): Promise<Post[]> {
+    console.log('get posts', 'error', 'post.log', 'only-console');
     return this.postService.posts({});
   }
 

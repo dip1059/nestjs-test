@@ -29,6 +29,7 @@
         <thead class="thead-dark">
           <tr>
             <th>Time</th>
+            <th>Level</th>
             <th>File</th>
             <th>Message</th>
           </tr>
@@ -36,11 +37,12 @@
         <tbody>
           {{#each logs}}
           <tr>
-            <td>
+            <td width="20%">
               <script>document.write(new Date('{{ this.time }}').toLocaleString());</script>
             </td>
+            <td>{{ this.level }}</td>
             <td>{{ this.fileInfo }}</td>
-            <td>{{ this.message }}</td>
+            <td width="50%">{{ this.message }}</td>
           </tr>
           {{/each}}
         </tbody>

@@ -28,6 +28,7 @@ export class UsersResolver {
     @Args('first', { nullable: true, type: () => Int }) first?: number,
     @Args('last', { nullable: true, type: () => Int }) last?: number,
   ): Promise<User[]> {
+    console.log('get users', 'warning');
     let sortOrder: Prisma.SortOrder;
     let take: number;
     if (first) {
@@ -47,6 +48,7 @@ export class UsersResolver {
   async getUser(
     @Args('email', { type: () => String }) email: string,
   ): Promise<User | null> {
+    console.log('get user', 'user.log');
     return this.userService.user({ email: email });
   }
 
