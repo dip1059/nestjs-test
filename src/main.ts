@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 import { PrismaService } from './prisma.service';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { logger } from './configs/logger';
+import { logger } from './helpers/logger.service';
 
 async function bootstrap() {
   logger();

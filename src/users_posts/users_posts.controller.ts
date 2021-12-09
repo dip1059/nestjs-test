@@ -11,10 +11,7 @@ import {
 import { PostService } from './posts.service';
 import { UserService } from './users.service';
 import { User as UserModel, Post as PostModel } from '@prisma/client';
-import {
-  ResponseData,
-  BaseResponse,
-} from 'src/other_services/base.response.service';
+import { ResponseData, BaseResponse } from 'src/helpers/base-response.service';
 import { UserCreateInput } from 'src/@generated/prisma-nestjs-graphql/user/user-create.input';
 import { __ } from '../helpers/helpers';
 

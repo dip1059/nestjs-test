@@ -18,7 +18,7 @@
 <body class="bg-light bg-gradient">
   <div class="container p-5">
     <div class="row text-center pb-3">
-      <h3 class="text-success">Logs</h4>
+      <h3 class="text-success">Logs ({{ file }})</h4>
     </div>
     <div class="row mb-5">
       <a href="" class="col-1 btn btn-success m-2">Reload</a>
@@ -65,7 +65,7 @@
     $(".data_table").DataTable({ order: [0, 'desc'] });
     function cleanFile(){
       let r = confirm('Are you sure?');
-      if(r) location.href = '/logviewer/clean-file';
+      if(r) location.href = '/logviewer/clean-file?file='+ '{{ file }}';
     }
   </script>
 

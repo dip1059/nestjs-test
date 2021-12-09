@@ -12,15 +12,19 @@ import {
 import { Post } from 'src/@generated/prisma-nestjs-graphql/post/post.model';
 import { UserCreateInput } from 'src/@generated/prisma-nestjs-graphql/user/user-create.input';
 import { User } from 'src/@generated/prisma-nestjs-graphql/user/user.model';
+import { MyLogger } from 'src/helpers/logger.service';
 import { PostService } from './posts.service';
 import { UserService } from './users.service';
 
 @Resolver(() => User)
 export class UsersResolver {
+  private logger: MyLogger;
   constructor(
     private userService: UserService,
     private postService: PostService,
-  ) {}
+  ) {
+    this.logger = new MyLogger('usersxx.log');
+  }
 
   @Query(() => [User])
   async getUsers(
@@ -48,7 +52,7 @@ export class UsersResolver {
   async getUser(
     @Args('email', { type: () => String }) email: string,
   ): Promise<User | null> {
-    console.log('get user', 'api request', 'error', 'user.log');
+    this.logger.write('hello from get user');
     return this.userService.user({ email: email });
   }
 

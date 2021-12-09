@@ -15,12 +15,13 @@ export class LogviewerController {
   @Render('logviewer')
   getLogs(@Query('file') file: string) {
     if (file === '') file = null;
-    return { logs: this.logviewerService.getLogs(file) };
+    return { logs: this.logviewerService.getLogs(file), file: file };
   }
 
   @Get('clean-file')
   cleanFile(@Query('file') file: string, @Res() res) {
+    if (!file) return res.redirect('/logviewer');
     this.logviewerService.cleanFile(file);
-    return res.redirect('/logviewer');
+    return res.redirect('/logviewer?file=' + file);
   }
 }
