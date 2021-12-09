@@ -27,4 +27,10 @@ export class LogviewerService {
     if (fs.existsSync(file)) fs.writeFileSync(file, '');
     return;
   }
+
+  deleteFile(file: string) {
+    file = './storage/logs/' + file;
+    if (fs.existsSync(file)) fs.unlinkSync(file);
+    return;
+  }
 }

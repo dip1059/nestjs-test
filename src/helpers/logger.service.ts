@@ -19,7 +19,9 @@ export class MyLogger {
 }
 
 export function logger() {
-  const logChannel = process.env.LOG_CHANNEL || LOG_CHANNEL_SINGLE;
+  let logChannel = LOG_CHANNEL_SINGLE;
+  if (process.env.LOG_CHANNEL === LOG_CHANNEL_DAILY)
+    logChannel = LOG_CHANNEL_DAILY;
 
   const logStdout = process.stdout;
 

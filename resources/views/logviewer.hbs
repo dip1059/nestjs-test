@@ -12,41 +12,69 @@
 
   <link href="/css/jquery.dataTables.min.css" rel="stylesheet">
 
+  <style>
+    .scroll {
+      width: 300px;
+      height: 500px;
+      background-color:ghostwhite;
+      overflow-x: hidden;
+      overflow-y: auto;
+      text-align: justify;
+    }
+  </style>
+
   <title>Logs</title>
 </head>
 
 <body class="bg-light bg-gradient">
-  <div class="container p-5">
+  <div class="container p-5" style="max-width: 2000px;">
     <div class="row text-center pb-3">
-      <h3 class="text-success">Logs ({{ file }})</h4>
-    </div>
-    <div class="row mb-5">
-      <a href="" class="col-1 btn btn-success m-2">Reload</a>
-      <a href="javascript:" onclick="cleanFile()" class="col-1 btn btn-danger m-2">Clean File</a>
+      {{#if file}}
+      <h3 class="text-success"> {{trans 'Logs'}} ({{ file }})</h4>
+        {{else}}
+        <h3 class="text-warning"> {{__ 'Select a file' }} </h4>
+          {{/if}}
     </div>
     <div class="row">
-      <table class="table data_table">
-        <thead class="thead-dark">
-          <tr>
-            <th>Time</th>
-            <th>Level</th>
-            <th>File</th>
-            <th>Message</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each logs}}
-          <tr>
-            <td width="20%">
-              <script>document.write(new Date('{{ this.time }}').toLocaleString());</script>
-            </td>
-            <td>{{ this.level }}</td>
-            <td>{{ this.fileInfo }}</td>
-            <td width="50%">{{ this.message }}</td>
-          </tr>
+      <div class="col-2 scroll" style="margin-top: 110px;">
+        <ul>
+          {{#each fileList}}
+          <li class="pt-2"><a href="/logviewer?file={{ this }}">{{ this }}</a></li>
           {{/each}}
-        </tbody>
-      </table>
+        </ul>
+      </div>
+      <div class="col-8">
+        {{#if file}}
+        <div class="row mb-5">
+          <a href="" class="col-1 btn btn-success m-2">Reload</a>
+          <a href="javascript:" onclick="cleanFile('{{ file }}')" class="col-1 btn btn-warning m-2">Clean File</a>
+          <a href="javascript:" style="width: 120px;" onclick="deleteFile('{{ file }}')"
+            class="col-1 btn btn-danger m-2">Delete File</a>
+        </div>
+        {{/if}}
+        <table class="table data_table">
+          <thead class="thead-dark">
+            <tr>
+              <th>Time</th>
+              <th>Level</th>
+              <th>File</th>
+              <th>Message</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each logs}}
+            <tr>
+              <td width="20%">
+                <script>document.write(new Date('{{ this.time }}').toLocaleString());</script>
+              </td>
+              <td>{{ this.level }}</td>
+              <td>{{ this.fileInfo }}</td>
+              <td width="50%">{{ this.message }}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -63,9 +91,15 @@
 
   <script>
     $(".data_table").DataTable({ order: [0, 'desc'] });
-    function cleanFile(){
-      let r = confirm('Are you sure?');
-      if(r) location.href = '/logviewer/clean-file?file='+ '{{ file }}';
+
+    function cleanFile(file) {
+      let r = confirm(`Are you sure? You want to clean "${file}"?`);
+      if (r) location.href = '/logviewer/clean-file?file=' + '{{ file }}';
+    }
+
+    function deleteFile(file) {
+      let r = confirm(`Are you sure? You want to delete "${file}"?`);
+      if (r) location.href = '/logviewer/delete-file?file=' + '{{ file }}';
     }
   </script>
 

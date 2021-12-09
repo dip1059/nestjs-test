@@ -16,6 +16,11 @@ viewFiles.forEach((file) => {
   newKeys = lang.collectLangKeys(file, newKeys);
 });
 
+viewFiles = glob.sync('./resources/views/**/*');
+viewFiles.forEach((file) => {
+  newKeys = lang.collectLangKeys(file, newKeys, 'trans');
+});
+
 let langFiles = glob.sync('./resources/lang/*.json');
 langFiles.forEach((file) => {
   lang.writeLangfile(file, newKeys);

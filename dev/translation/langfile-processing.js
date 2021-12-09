@@ -1,21 +1,38 @@
 const fs = require('fs');
 
-function collectLangKeys(file, newKeys = [], funcSignature = '__()') {
-  funcSignature = funcSignature.split('(')[0];
+function collectLangKeys(file, newKeys = [], funcSignature = '__') {
   try {
     let data = '';
+    let dataArr = [];
     try {
       data = fs.readFileSync(file).toString();
     } catch {}
     if (data !== '') {
-      if (funcSignature === '__')
+      if (funcSignature === '__') {
         dataArr = [...data.matchAll(/\_\_\([\'|\"](.*?)[\'|\"]\)/g)];
-      else
+        dataArr = dataArr.concat([
+          ...data.matchAll(/\_\_ [\'|\"](.*?)[\'|\"] /g),
+        ]);
+        dataArr = dataArr.concat([
+          ...data.matchAll(/\_\_ [\'|\"](.*?)[\'|\"]\}/g),
+        ]);
+      } else {
         dataArr = [
           ...data.matchAll(
             new RegExp(`${funcSignature}\\([\\'|\\"](.*?)[\\'|\\"]\\)`, 'g'),
           ),
         ];
+        dataArr = dataArr.concat([
+          ...data.matchAll(
+            new RegExp(`${funcSignature} [\\'|\\"](.*?)[\\'|\\"] `, 'g'),
+          ),
+        ]);
+        dataArr = dataArr.concat([
+          ...data.matchAll(
+            new RegExp(`${funcSignature} [\\'|\\"](.*?)[\\'|\\"]\\}`, 'g'),
+          ),
+        ]);
+      }
 
       for (let i = 0; i < dataArr.length; i++) {
         newKeys.push(dataArr[i][1]);
@@ -55,7 +72,13 @@ async function writeLangfile(file, newKeys = []) {
         }
       });
     }
-    fs.writeFileSync(file, String(JSON.stringify(langKeys)));
+
+    data = JSON.stringify(langKeys);
+    data = data.replace('{', '{\n  ');
+    data = data.replace('}', '\n}');
+    data = data.replace(/","/gi, '",\n  "');
+
+    fs.writeFileSync(file, data);
   } catch (error) {
     console.log(error.toString());
   }

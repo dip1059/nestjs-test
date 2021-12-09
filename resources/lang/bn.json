@@ -1,5 +1,7 @@
 {
-  "Something went wrong": "কিছু ভুল হয়েছে",
-  "Request from unauthorize app": "অননুমোদিত অ্যাপ থেকে অনুরোধ",
-  "User not found": "ব্যবহারকারী খুঁজে পাওয়া যায় না"
+  "Something went wrong":"কিছু ভুল হয়েছে",
+  "Request from unauthorize app":"অননুমোদিত অ্যাপ থেকে অনুরোধ",
+  "User not found":"ব্যবহারকারী পাওয়া যায়নি",
+  "Select a file":"একটি ফাইল নির্বাচন করুন",
+  "Logs":"লগস"
 }

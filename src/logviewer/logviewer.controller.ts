@@ -1,11 +1,17 @@
 import { Controller, Get, Render, Query, Res } from '@nestjs/common';
 import { LogviewerService } from './logviewer.service';
-// import * as hbs from 'hbs';
+import * as glob from 'glob';
+import { basename } from 'path';
+import * as hbs from 'hbs';
+import { __ } from 'src/helpers/helpers';
 
-// hbs.registerHelper('helper_name', function (options) {
-//   return 'helper value';
-// });
-// hbs.registerPartial('partial_name', 'partial value');
+hbs.registerHelper('__', function (key: string) {
+  return __(key);
+});
+hbs.registerHelper('trans', function (key: string) {
+  return __(key);
+});
+// hbs.registerPartial('pp', 'partial value');
 
 @Controller('logviewer')
 export class LogviewerController {
@@ -14,8 +20,18 @@ export class LogviewerController {
   @Get()
   @Render('logviewer')
   getLogs(@Query('file') file: string) {
-    if (file === '') file = null;
-    return { logs: this.logviewerService.getLogs(file), file: file };
+    const logFiles = glob.sync('./storage/logs/*.log');
+    logFiles.forEach((value, index, logFiles) => {
+      logFiles[index] = basename(value);
+    });
+    if (!file) {
+      return { logs: [], fileList: logFiles, file: '' };
+    }
+    return {
+      logs: this.logviewerService.getLogs(file),
+      fileList: logFiles,
+      file: file,
+    };
   }
 
   @Get('clean-file')
@@ -23,5 +39,12 @@ export class LogviewerController {
     if (!file) return res.redirect('/logviewer');
     this.logviewerService.cleanFile(file);
     return res.redirect('/logviewer?file=' + file);
+  }
+
+  @Get('delete-file')
+  deleteFile(@Query('file') file: string, @Res() res) {
+    if (!file) return res.redirect('/logviewer');
+    this.logviewerService.deleteFile(file);
+    return res.redirect('/logviewer');
   }
 }
