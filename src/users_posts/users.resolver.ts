@@ -12,6 +12,7 @@ import {
 import { Post } from 'src/@generated/prisma-nestjs-graphql/post/post.model';
 import { UserCreateInput } from 'src/@generated/prisma-nestjs-graphql/user/user-create.input';
 import { User } from 'src/@generated/prisma-nestjs-graphql/user/user.model';
+import { ResponseData } from 'src/helpers/base-response.service';
 import { MyLogger } from 'src/helpers/logger.service';
 import { PostService } from './posts.service';
 import { UserService } from './users.service';
@@ -46,6 +47,14 @@ export class UsersResolver {
       take: take,
       orderBy: { id: sortOrder },
     });
+  }
+
+  @Query(() => ResponseData)
+  async login(
+    @Args('email', { type: () => String }) email: string,
+    @Args('password', { type: () => String }) password: string,
+  ) {
+    return this.userService.login(email, password);
   }
 
   @Query(() => User, { nullable: true })

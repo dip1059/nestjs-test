@@ -12,6 +12,9 @@ export class User {
   @Field(() => String, { nullable: false })
   email!: string;
 
+  // @Field(() => String)
+  password: string | null;
+
   @Field(() => String, { nullable: true })
   phone!: string | null;
 

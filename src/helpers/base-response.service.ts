@@ -1,9 +1,17 @@
+import { Field, ObjectType } from '@nestjs/graphql';
+import { User } from 'src/@generated/prisma-nestjs-graphql/user/user.model';
 import { __ } from './helpers';
 
-export interface ResponseData {
+@ObjectType()
+export class ResponseData {
+  @Field(() => Boolean)
   success: boolean;
+
+  @Field()
   message: string;
-  data: object;
+
+  @Field(() => User, { nullable: true })
+  data: any;
 }
 
 export class BaseResponse {
@@ -14,7 +22,7 @@ export class BaseResponse {
     return {
       success: false,
       message: message || __('Something went wrong'),
-      data: null,
+      data: data,
     };
   }
 }

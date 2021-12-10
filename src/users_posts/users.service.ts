@@ -1,12 +1,30 @@
 import { Prisma, User } from '.prisma/client';
 import { Injectable } from '@nestjs/common';
+import { compare, hash } from 'bcryptjs';
 import { UserCreateInput } from 'src/@generated/prisma-nestjs-graphql/user/user-create.input';
+import { BaseResponse, ResponseData } from 'src/helpers/base-response.service';
+import { __ } from 'src/helpers/helpers';
 // import { User } from 'src/@generated/prisma-nestjs-graphql/user/user.model';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
-export class UserService {
-  constructor(private prisma: PrismaService) {}
+export class UserService extends BaseResponse {
+  constructor(private prisma: PrismaService) {
+    super();
+  }
+
+  async login(email: string, password: string): Promise<ResponseData> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        email: email,
+      },
+    });
+    if (!user) return this.errorResponse(__('User not found.'));
+    if (!(await compare(password, user.password)))
+      return this.errorResponse(__('Wrong credentials.'));
+
+    return this.successResponse(user);
+  }
 
   async user(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
@@ -35,6 +53,7 @@ export class UserService {
   }
 
   async createUser(data: UserCreateInput): Promise<User> {
+    data.password = await hash(data.password, 10);
     return this.prisma.user.create({
       data,
     });

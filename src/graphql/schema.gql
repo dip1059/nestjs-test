@@ -63,6 +63,13 @@ type Query {
   getPosts: [Post!]!
   getUser(email: String!): User
   getUsers(first: Int, last: Int): [User!]!
+  login(email: String!, password: String!): ResponseData!
+}
+
+type ResponseData {
+  data: User
+  message: String!
+  success: Boolean!
 }
 
 type User {
@@ -81,6 +88,7 @@ type UserCount {
 input UserCreateInput {
   email: String!
   name: String
+  password: String!
   phone: String
   posts: PostCreateNestedManyWithoutAuthorInput
 }
