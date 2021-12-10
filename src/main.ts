@@ -9,7 +9,9 @@ import { logger } from './helpers/logger.service';
 async function bootstrap() {
   logger();
   //const app = await NestFactory.create(AppModule);
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    logger: console,
+  });
 
   app.useGlobalPipes(new ValidationPipe());
 

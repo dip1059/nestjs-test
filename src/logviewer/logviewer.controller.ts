@@ -24,6 +24,8 @@ export class LogviewerController {
     logFiles.forEach((value, index, logFiles) => {
       logFiles[index] = basename(value);
     });
+    logFiles.sort();
+    logFiles.reverse();
     if (!file) {
       return { logs: [], fileList: logFiles, file: '' };
     }
