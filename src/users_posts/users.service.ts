@@ -13,10 +13,10 @@ export class UserService extends BaseResponse {
     super();
   }
 
-  async login(email: string, password: string): Promise<ResponseData> {
+  async login(username: string, password: string): Promise<ResponseData> {
     const user = await this.prisma.user.findFirst({
       where: {
-        email: email,
+        email: username,
       },
     });
     if (!user) return this.errorResponse(__('User not found.'));

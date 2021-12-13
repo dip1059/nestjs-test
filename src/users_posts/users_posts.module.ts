@@ -9,6 +9,12 @@ import { UserAndPostController } from './users_posts.controller';
 @Module({
   imports: [],
   controllers: [UserAndPostController],
-  providers: [UserService, PostService, PrismaService, UsersResolver, PostsResolver],
+  providers: [
+    UserService,
+    PostService,
+    PrismaService,
+    UsersResolver,
+    PostsResolver,
+  ],
 })
 export class UserAndPostModule {}

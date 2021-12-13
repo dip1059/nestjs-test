@@ -58,7 +58,7 @@ async function warn(message: string, ...optionalParams: any[]) {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function error(message: string, ...optionalParams: any[]) {
   try {
-    log(message, LOG_LEVEL_ERROR);
+    log(message + optionalParams, LOG_LEVEL_ERROR);
   } catch (error) {
     logCatch(message);
     logCatch(error.toString());

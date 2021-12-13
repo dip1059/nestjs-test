@@ -10,6 +10,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { LocalizationModule } from '@squareboat/nestjs-localization/dist/src';
 import { AppAuthMiddleware } from './middlewares/app-authentication.middleware';
 import { localization } from './middlewares/localization.middlewares';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { localization } from './middlewares/localization.middlewares';
     ProductModule,
     UserAndPostModule,
     LogviewerModule,
+    AuthModule,
   ],
 })
 export class AppModule implements NestModule {
