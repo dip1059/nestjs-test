@@ -5,7 +5,6 @@ import { PrismaService } from './prisma.service';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { logger } from './helpers/logger.service';
-import * as session from 'express-session';
 import * as passport from 'passport';
 import f = require('session-file-store');
 
@@ -17,27 +16,7 @@ async function bootstrap() {
   });
 
   app.useGlobalPipes(new ValidationPipe());
-
-  //passport & session
-  // app.set('trust proxy', 1); // trust first proxy
-
-  const FileStore = f(session);
-
-  app.use(
-    session({
-      store: new FileStore({ path: './storage/sessions' }),
-      secret: 'my-secret',
-      resave: false,
-      saveUninitialized: true,
-      //cookie: { secure: true },
-      cookie: {
-        maxAge: 3600000,
-      },
-    }),
-  );
   app.use(passport.initialize());
-  app.use(passport.session());
-  //
 
   //using functional middleware
   // app.use(localization);

@@ -39,10 +39,10 @@ import { AuthModule } from './auth/auth.module';
         },
       }),
     }),
+    AuthModule,
     ProductModule,
     UserAndPostModule,
     LogviewerModule,
-    AuthModule,
   ],
 })
 export class AppModule implements NestModule {

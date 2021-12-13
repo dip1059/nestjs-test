@@ -16,5 +16,6 @@ import { UserAndPostController } from './users_posts.controller';
     UsersResolver,
     PostsResolver,
   ],
+  exports: [UserService, PrismaService],
 })
 export class UserAndPostModule {}

@@ -16,9 +16,9 @@ import { User as UserModel, Post as PostModel } from '@prisma/client';
 import { ResponseData, BaseResponse } from 'src/helpers/base-response.service';
 import { UserCreateInput } from 'src/@generated/prisma-nestjs-graphql/user/user-create.input';
 import { __ } from '../helpers/helpers';
-import { LocalAuthGuard } from 'src/auth/local-auth.guard';
-import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('api')
 export class UserAndPostController extends BaseResponse {
   constructor(
@@ -28,13 +28,6 @@ export class UserAndPostController extends BaseResponse {
     super();
   }
 
-  @UseGuards(LocalAuthGuard)
-  @Post('login')
-  async login(): Promise<ResponseData> {
-    return this.successResponse(null, __('Logged in successfully.'));
-  }
-
-  @UseGuards(AuthenticatedGuard)
   @Get('profile')
   async getUserProfile(@Request() req): Promise<ResponseData> {
     return this.successResponse({
@@ -42,17 +35,6 @@ export class UserAndPostController extends BaseResponse {
     });
   }
 
-  @UseGuards(AuthenticatedGuard)
-  @Get('logout')
-  async logout(@Request() req): Promise<ResponseData> {
-    req.session.destroy();
-    return this.successResponse(
-      { user: req.user },
-      __('Logged out successfully'),
-    );
-  }
-
-  @UseGuards(AuthenticatedGuard)
   @Get('users')
   async getUsers(): Promise<ResponseData> {
     return this.successResponse({
