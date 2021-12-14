@@ -13,7 +13,7 @@ export class User {
   email!: string;
 
   // @Field(() => String)
-  password: string | null;
+  //password: string | null;
 
   @Field(() => String, { nullable: true })
   phone!: string | null;

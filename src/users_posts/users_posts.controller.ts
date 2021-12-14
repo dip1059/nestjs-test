@@ -12,13 +12,15 @@ import {
 } from '@nestjs/common';
 import { PostService } from './posts.service';
 import { UserService } from './users.service';
-import { User as UserModel, Post as PostModel } from '@prisma/client';
+
 import { ResponseData, BaseResponse } from 'src/helpers/base-response.service';
 import { UserCreateInput } from 'src/@generated/prisma-nestjs-graphql/user/user-create.input';
 import { __ } from '../helpers/helpers';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { AuthGuard } from '@nestjs/passport';
+import { User } from 'src/@generated/prisma-nestjs-graphql/user/user.model';
+import { Post as PostModel } from 'src/@generated/prisma-nestjs-graphql/post/post.model';
 
-@UseGuards(JwtAuthGuard)
+@UseGuards(AuthGuard('jwt'))
 @Controller('api')
 export class UserAndPostController extends BaseResponse {
   constructor(
@@ -43,7 +45,7 @@ export class UserAndPostController extends BaseResponse {
   }
 
   @Post('users')
-  async signupUser(@Body() userData: UserCreateInput): Promise<UserModel> {
+  async signupUser(@Body() userData: UserCreateInput): Promise<User> {
     return this.userService.createUser(userData);
   }
 
@@ -56,7 +58,7 @@ export class UserAndPostController extends BaseResponse {
   }
 
   @Get('posts/:id')
-  async getPostById(@Param('id') id: string): Promise<PostModel> {
+  async getPostById(@Param('id') id: string) {
     return this.postService.post({ id: Number(id) });
   }
 
@@ -108,7 +110,7 @@ export class UserAndPostController extends BaseResponse {
   }
 
   @Delete('users/:id')
-  async deleteUser(@Param('id') id: string): Promise<UserModel> {
+  async deleteUser(@Param('id') id: string): Promise<User> {
     return this.userService.deleteUser({ id: Number(id) });
   }
 
