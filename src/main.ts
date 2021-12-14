@@ -5,6 +5,8 @@ import { PrismaService } from './prisma.service';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { logger } from './helpers/logger.service';
+import { ConfigService } from '@nestjs/config';
+import { AppConfigInterface } from './configs/app.config';
 
 async function bootstrap() {
   logger();
@@ -22,7 +24,10 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '..', 'resources/views'));
   app.setViewEngine('hbs');
 
-  await app.listen(process.env.APP_PORT || 3000);
+  const configService = app.get(ConfigService);
+  const appConfig = configService.get<AppConfigInterface>('app');
+
+  await app.listen(appConfig.port);
 
   const prismaService: PrismaService = app.get(PrismaService);
   prismaService.enableShutdownHooks(app);

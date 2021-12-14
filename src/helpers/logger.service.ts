@@ -19,11 +19,11 @@ export class MyLogger {
   constructor(private logFile?: string) {}
 
   write(msg: string, level?: string) {
-    console.log(msg, level, this.logFile, '', 3);
+    console.log(msg, level, this.logFile || 'debug.log', '', 3);
   }
 }
 
-export function logger() {
+export async function logger() {
   try {
     logChannel = LOG_CHANNEL_SINGLE;
     if (process.env.LOG_CHANNEL === LOG_CHANNEL_DAILY)
@@ -122,7 +122,7 @@ function logCatch(message: any) {
     id: +new Date() /*current timestamp number*/,
     time: new Date(),
     level: LOG_LEVEL_ERROR,
-    fileInfo: basename(__filename),
+    fileInfo: `${basename(__filename)}:logCatch`,
     message: message,
   };
   fs.writeFileSync(logFilePath, JSON.stringify(log) + ',\n', { flag: 'a' });

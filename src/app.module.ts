@@ -1,5 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
+import { GqlModuleOptions, GraphQLModule } from '@nestjs/graphql';
 //import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { join } from 'path';
 // import { AppAuthMiddleware } from './middlewares/app-authentication.middleware';
@@ -10,9 +10,16 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { LocalizationModule } from '@squareboat/nestjs-localization/dist/src';
 import { AppAuthMiddleware } from './middlewares/app-authentication.middleware';
 import { localization } from './middlewares/localization.middlewares';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AppConfig } from './configs/app.config';
+import { GraphqlConfig } from './configs/graphql.config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [AppConfig, GraphqlConfig],
+    }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
       exclude: ['/graphql*'],
@@ -22,21 +29,10 @@ import { localization } from './middlewares/localization.middlewares';
       fallbackLang: 'en',
     }),
     GraphQLModule.forRootAsync({
-      useFactory: () => ({
-        autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
-        debug: true,
-        installSubscriptionHandlers: true,
-        sortSchema: true,
-        /* formatError: (error: GraphQLError): GraphQLFormattedError => {
-          return error.originalError instanceof BaseException
-            ? error.originalError.serialize()
-            : error;
-        }, */
-        context: ({ req }): object => {
-          //console.log('req.ip: ', req.ip); // Here I have the ip
-          return { req };
-        },
-      }),
+      useFactory: (configService: ConfigService) => {
+        return configService.get<GqlModuleOptions>('graphql');
+      },
+      inject: [ConfigService],
     }),
     ProductModule,
     UserAndPostModule,
