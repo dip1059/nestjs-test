@@ -2,10 +2,20 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AuthToken {
+  accessToken: String!
+}
+
+input LoginInput {
+  password: String!
+  username: String!
+}
+
 type Mutation {
   createPost(post: PostCreateInput!): Post!
   createUser(data: UserCreateInput!): User!
   deleteUser(email: String!): User!
+  login(loginData: LoginInput!): AuthToken!
   updateUser(id: Int!, name: String, phone: String): User!
 }
 
@@ -61,6 +71,7 @@ input PostWhereUniqueInput {
 
 type Query {
   getPosts: [Post!]!
+  getProfile: User!
   getUser(email: String!): User
   getUsers(first: Int, last: Int): [User!]!
 }
@@ -81,6 +92,7 @@ type UserCount {
 input UserCreateInput {
   email: String!
   name: String
+  password: String!
   phone: String
   posts: PostCreateNestedManyWithoutAuthorInput
 }

@@ -1,4 +1,5 @@
 import { Prisma } from '.prisma/client';
+import { UseGuards } from '@nestjs/common';
 import {
   Args,
   Context,
@@ -12,10 +13,12 @@ import {
 import { Post } from 'src/@generated/prisma-nestjs-graphql/post/post.model';
 import { UserCreateInput } from 'src/@generated/prisma-nestjs-graphql/user/user-create.input';
 import { User } from 'src/@generated/prisma-nestjs-graphql/user/user.model';
+import { JwtAuthGuard } from 'src/auth/jwt-gql-auth.guard';
 import { MyLogger } from 'src/helpers/logger.service';
 import { PostService } from './posts.service';
 import { UserService } from './users.service';
 
+@UseGuards(JwtAuthGuard)
 @Resolver(() => User)
 export class UsersResolver {
   private logger: MyLogger;
@@ -46,6 +49,11 @@ export class UsersResolver {
       take: take,
       orderBy: { id: sortOrder },
     });
+  }
+
+  @Query(() => User)
+  async getProfile(@Context() context): Promise<User> {
+    return context.req.user;
   }
 
   @Query(() => User, { nullable: true })

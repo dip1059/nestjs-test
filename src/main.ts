@@ -7,6 +7,8 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { logger } from './helpers/logger.service';
 import { ConfigService } from '@nestjs/config';
 import { AppConfigInterface } from './configs/app.config';
+import * as passport from 'passport';
+import f = require('session-file-store');
 
 async function bootstrap() {
   logger();
@@ -16,6 +18,7 @@ async function bootstrap() {
   });
 
   app.useGlobalPipes(new ValidationPipe());
+  app.use(passport.initialize());
 
   //using functional middleware
   // app.use(localization);

@@ -9,6 +9,9 @@ export class UserCreateInput {
   @Val.IsEmail()
   email!: string;
 
+  @Field(() => String)
+  password: string;
+
   @Field(() => String, { nullable: true })
   phone?: string;
 

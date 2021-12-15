@@ -13,6 +13,7 @@ import { localization } from './middlewares/localization.middlewares';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppConfig } from './configs/app.config';
 import { GraphqlConfig } from './configs/graphql.config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { GraphqlConfig } from './configs/graphql.config';
       },
       inject: [ConfigService],
     }),
+    AuthModule,
     ProductModule,
     UserAndPostModule,
     LogviewerModule,
