@@ -35,7 +35,7 @@ export class UsersResolver {
     @Args('first', { nullable: true, type: () => Int }) first?: number,
     @Args('last', { nullable: true, type: () => Int }) last?: number,
   ): Promise<User[]> {
-    console.log('get users', 'warning');
+    console.log('get users', 'warn');
     let sortOrder: Prisma.SortOrder;
     let take: number;
     if (first) {

@@ -67,7 +67,15 @@
               <td width="20%">
                 <script>document.write(new Date('{{ this.time }}').toLocaleString());</script>
               </td>
-              <td>{{ this.level }}</td>
+              {{#if (eq this.level 'error')}}
+              <td><span class="badge bg-danger">{{ this.level }}</span></td>
+              {{else if (eq this.level 'warn')}}
+              <td><span class="badge bg-warning">{{ this.level }}</span></td>
+              {{else if (eq this.level 'debug')}}
+              <td><span class="badge bg-primary">{{ this.level }}</span></td>
+              {{else}}
+              <td>{{this.level}}</td>
+              {{/if}}
               <td>{{ this.fileInfo }}</td>
               <td width="50%">{{ this.message }}</td>
             </tr>

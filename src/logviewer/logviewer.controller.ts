@@ -11,6 +11,9 @@ hbs.registerHelper('__', function (key: string) {
 hbs.registerHelper('trans', function (key: string) {
   return __(key);
 });
+hbs.registerHelper('eq', function (a, b) {
+  return a === b;
+});
 // hbs.registerPartial('pp', 'partial value');
 
 @Controller('logviewer')
