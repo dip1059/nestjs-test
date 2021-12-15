@@ -9,6 +9,7 @@ import {
   Put,
   Request,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { PostService } from './posts.service';
 import { UserService } from './users.service';
@@ -19,7 +20,9 @@ import { __ } from '../helpers/helpers';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/@generated/prisma-nestjs-graphql/user/user.model';
 import { Post as PostModel } from 'src/@generated/prisma-nestjs-graphql/post/post.model';
+import { UserResponseInterceptor } from 'src/interceptors/user-response.interceptor';
 
+@UseInterceptors(UserResponseInterceptor)
 @UseGuards(AuthGuard('jwt'))
 @Controller('api')
 export class UserAndPostController extends BaseResponse {

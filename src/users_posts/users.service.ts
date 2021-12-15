@@ -18,7 +18,7 @@ export class UserService extends BaseResponse {
     const user = await this.prisma.user.findUnique({
       where: userWhereUniqueInput,
     });
-    delete user.password;
+    // delete user.password;
     return user;
   }
 
