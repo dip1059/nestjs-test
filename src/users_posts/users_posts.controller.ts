@@ -7,7 +7,6 @@ import {
   Param,
   Post,
   Put,
-  Render,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -17,7 +16,6 @@ import { User as UserModel, Post as PostModel } from '@prisma/client';
 import { ResponseData, BaseResponse } from 'src/helpers/base-response.service';
 import { UserCreateInput } from 'src/@generated/prisma-nestjs-graphql/user/user-create.input';
 import { __ } from '../helpers/helpers';
-import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 
 @Controller('api')
@@ -29,34 +27,12 @@ export class UserAndPostController extends BaseResponse {
     super();
   }
 
-  @Get('login')
-  @Render('login')
-  async loginPage() {
-    return {};
-  }
-
-  @UseGuards(LocalAuthGuard)
-  @Post('login')
-  async login(): Promise<ResponseData> {
-    return this.successResponse(null, __('Logged in successfully.'));
-  }
-
   @UseGuards(AuthenticatedGuard)
   @Get('profile')
   async getUserProfile(@Request() req): Promise<ResponseData> {
     return this.successResponse({
       user: req.user,
     });
-  }
-
-  @UseGuards(AuthenticatedGuard)
-  @Get('logout')
-  async logout(@Request() req): Promise<ResponseData> {
-    req.session.destroy();
-    return this.successResponse(
-      { user: req.user },
-      __('Logged out successfully'),
-    );
   }
 
   @UseGuards(AuthenticatedGuard)

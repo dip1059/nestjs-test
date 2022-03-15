@@ -32,7 +32,8 @@
       <h5>
         Login
       </h5>
-      <form action="/api/login" method="post">
+      <form action="/auth/login" method="post">
+      <input type="hidden" name="redirect" value="{{ redirect }}">
         <div class="col-8 mb-3">
           <label for="exampleInputEmail1" class="form-label">Email address</label>
           <input type="email" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
