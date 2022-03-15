@@ -50,5 +50,9 @@ async function bootstrap() {
 
   const prismaService: PrismaService = app.get(PrismaService);
   prismaService.enableShutdownHooks(app);
+
+  console.log(
+    `Server started at: http://localhost:${process.env.APP_PORT || 3000}`,
+  );
 }
 bootstrap();

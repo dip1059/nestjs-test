@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Render,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -26,6 +27,12 @@ export class UserAndPostController extends BaseResponse {
     private readonly postService: PostService,
   ) {
     super();
+  }
+
+  @Get('login')
+  @Render('login')
+  async loginPage() {
+    return {};
   }
 
   @UseGuards(LocalAuthGuard)

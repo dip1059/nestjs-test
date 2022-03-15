@@ -1,9 +1,10 @@
-import { Controller, Get, Render, Query, Res } from '@nestjs/common';
+import { Controller, Get, Render, Query, Res, UseGuards } from '@nestjs/common';
 import { LogviewerService } from './logviewer.service';
 import * as glob from 'glob';
 import { basename } from 'path';
 import * as hbs from 'hbs';
 import { __ } from 'src/helpers/helpers';
+import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 
 hbs.registerHelper('__', function (key: string) {
   return __(key);
@@ -13,6 +14,7 @@ hbs.registerHelper('trans', function (key: string) {
 });
 // hbs.registerPartial('pp', 'partial value');
 
+@UseGuards(AuthenticatedGuard)
 @Controller('logviewer')
 export class LogviewerController {
   constructor(private readonly logviewerService: LogviewerService) {}

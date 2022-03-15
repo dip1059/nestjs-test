@@ -23,63 +23,26 @@
     }
   </style>
 
-  <title>Logs</title>
+  <title>Login</title>
 </head>
 
 <body class="bg-light bg-gradient">
   <div class="container p-5" style="max-width: 2000px;">
-    <div class="row text-center pb-3">
-      <div class="col-10">
-        {{#if file}}
-        <h3 class="text-success"> {{trans 'Logs'}} ({{ file }})</h4>
-          {{else}}
-          <h3 class="text-warning"> {{__ 'Select a file' }} </h4>
-            {{/if}}
-      </div>
-      <div class="col-2">
-        <a href="/api/logout" class="btn btn-dark m-2">Logout</a>
-      </div>
-    </div>
     <div class="row">
-      <div class="col-2 scroll" style="margin-top: 110px;">
-        <ul>
-          {{#each fileList}}
-          <li class="pt-2"><a href="/logviewer?file={{ this }}">{{ this }}</a></li>
-          {{/each}}
-        </ul>
-      </div>
-      <div class="col-8">
-        {{#if file}}
-        <div class="row mb-5">
-          <a href="" class="col-1 btn btn-success m-2">Reload</a>
-          <a href="javascript:" onclick="cleanFile('{{ file }}')" class="col-1 btn btn-warning m-2">Clean File</a>
-          <a href="javascript:" style="width: 120px;" onclick="deleteFile('{{ file }}')"
-            class="col-1 btn btn-danger m-2">Delete File</a>
+      <h5>
+        Login
+      </h5>
+      <form action="/api/login" method="post">
+        <div class="col-8 mb-3">
+          <label for="exampleInputEmail1" class="form-label">Email address</label>
+          <input type="email" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
         </div>
-        {{/if}}
-        <table class="table data_table">
-          <thead class="thead-dark">
-            <tr>
-              <th>Time</th>
-              <th>Level</th>
-              <th>File</th>
-              <th>Message</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#each logs}}
-            <tr>
-              <td width="20%">
-                <script>document.write(new Date('{{ this.time }}').toLocaleString());</script>
-              </td>
-              <td>{{ this.level }}</td>
-              <td>{{ this.fileInfo }}</td>
-              <td width="50%">{{ this.message }}</td>
-            </tr>
-            {{/each}}
-          </tbody>
-        </table>
-      </div>
+        <div class="col-8 mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
     </div>
   </div>
 
