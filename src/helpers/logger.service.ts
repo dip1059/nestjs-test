@@ -82,6 +82,14 @@ async function log(
   const logFilePath = `./storage/logs/${logFile}`;
 
   try {
+    if (writeStream == LOG_STDOUT_STREAM) {
+      logStdout.write(message);
+      logStdout.write('\n');
+      return;
+    }
+    if (skipMessages(message)) return;
+    if (skipLevels(level)) return;
+
     //finding file name and line
     const i = optionalParams[0] || 2;
     const fileNline = basename(
@@ -126,4 +134,27 @@ function logCatch(message: any) {
     message: message,
   };
   fs.writeFileSync(logFilePath, JSON.stringify(log) + ',\n', { flag: 'a' });
+}
+
+function skipMessages(message: string): boolean {
+  if (
+    message.search(
+      /\[session-file-store] will retry, error on last attempt: Error: ENOENT: no such file or directory, open/,
+    ) >= 0
+  ) {
+    return true;
+  }
+  return false;
+}
+
+function skipLevels(level: string): boolean {
+  if (
+    level == 'NestFactory' ||
+    level == 'InstanceLoader' ||
+    level == 'RoutesResolver' ||
+    level == 'RouterExplorer'
+  ) {
+    return true;
+  }
+  return false;
 }

@@ -1,4 +1,9 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 
@@ -7,10 +12,16 @@ export class LocalAuthGuard extends AuthGuard('local') {
   async canActivate(context: ExecutionContext) {
     const result = (await super.canActivate(context)) as boolean;
     const request = context.switchToHttp().getRequest();
-    //console.log(request.body.redirect);
-    //const res = context.switchToHttp().getResponse<Response>();
     await super.logIn(request);
-    //res.redirect(request.body.redirect);
     return result;
+  }
+}
+
+@Injectable()
+export class LoginInterceptor implements NestInterceptor {
+  intercept(context: ExecutionContext, next: CallHandler) {
+    const response = context.switchToHttp().getResponse<Response>();
+    //response.redirect('/logviewer');
+    return next.handle();
   }
 }

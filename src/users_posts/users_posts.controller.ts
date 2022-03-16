@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Request,
+  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { PostService } from './posts.service';
@@ -16,7 +17,10 @@ import { User as UserModel, Post as PostModel } from '@prisma/client';
 import { ResponseData, BaseResponse } from 'src/helpers/base-response.service';
 import { UserCreateInput } from 'src/@generated/prisma-nestjs-graphql/user/user-create.input';
 import { __ } from '../helpers/helpers';
-import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
+import {
+  AuthenticatedGuard,
+  AuthGuardFilter,
+} from 'src/auth/authenticated.guard';
 
 @Controller('api')
 export class UserAndPostController extends BaseResponse {
@@ -28,6 +32,7 @@ export class UserAndPostController extends BaseResponse {
   }
 
   @UseGuards(AuthenticatedGuard)
+  @UseFilters(AuthGuardFilter)
   @Get('profile')
   async getUserProfile(@Request() req): Promise<ResponseData> {
     return this.successResponse({
