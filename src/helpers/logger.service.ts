@@ -19,11 +19,11 @@ export class MyLogger {
   constructor(private logFile?: string) {}
 
   write(msg: string, level?: string) {
-    console.log(msg, level, this.logFile, '', 3);
+    console.log(msg, level, this.logFile || 'debug.log', '', 3);
   }
 }
 
-export function logger() {
+export async function logger() {
   try {
     logChannel = LOG_CHANNEL_SINGLE;
     if (process.env.LOG_CHANNEL === LOG_CHANNEL_DAILY)
@@ -50,7 +50,7 @@ async function warn(message: string, ...optionalParams: any[]) {
     log(message, LOG_LEVEL_WARN);
   } catch (error) {
     logCatch(message);
-    logCatch(error.toString());
+    logCatch(error.stack);
   }
 }
 // eslint-disable-next-line prettier/prettier
@@ -61,7 +61,7 @@ async function error(message: string, ...optionalParams: any[]) {
     log(message + optionalParams, LOG_LEVEL_ERROR);
   } catch (error) {
     logCatch(message);
-    logCatch(error.toString());
+    logCatch(error.stack);
   }
 }
 
@@ -79,6 +79,11 @@ async function log(
   if (logChannel === LOG_CHANNEL_DAILY && logFile === 'debug.log') {
     logFile = `${new Date().toISOString().split('T')[0]}_${logFile}`;
   }
+
+  // fs.writeFileSync('./storage/logs/debug.log', `\n`, {
+  //   flag: 'a',
+  // });
+
   const logFilePath = `./storage/logs/${logFile}`;
 
   try {
@@ -93,12 +98,12 @@ async function log(
     //finding file name and line
     const i = optionalParams[0] || 2;
     const fileNline = basename(
-      new Error().stack.split('\n')[i].split('(')[1],
+      new Error().stack.split('\n')[i] /* .split('(')[1] */,
     ).split(':');
     const fileInfo = `${fileNline[0]}:${fileNline[1]}`;
     //
 
-    const log = {
+    const logObj = {
       id: +new Date() /*current timestamp number*/,
       time: new Date(),
       level: level,
@@ -109,14 +114,18 @@ async function log(
     if (writeStream === LOG_STDOUT_STREAM) {
       logStdout.write(message + '\n');
     } else if (writeStream === LOG_FILE_STREAM) {
-      fs.writeFileSync(logFilePath, JSON.stringify(log) + ',\n', { flag: 'a' });
+      fs.writeFileSync(logFilePath, JSON.stringify(logObj) + ',\n', {
+        flag: 'a',
+      });
     } else {
-      fs.writeFileSync(logFilePath, JSON.stringify(log) + ',\n', { flag: 'a' });
+      fs.writeFileSync(logFilePath, JSON.stringify(logObj) + ',\n', {
+        flag: 'a',
+      });
       logStdout.write(message + '\n');
     }
   } catch (error) {
     logCatch(message);
-    logCatch(error.toString());
+    logCatch(error.stack);
   }
 }
 
@@ -130,7 +139,7 @@ function logCatch(message: any) {
     id: +new Date() /*current timestamp number*/,
     time: new Date(),
     level: LOG_LEVEL_ERROR,
-    fileInfo: basename(__filename),
+    fileInfo: `${basename(__filename)}:logCatch`,
     message: message,
   };
   fs.writeFileSync(logFilePath, JSON.stringify(log) + ',\n', { flag: 'a' });

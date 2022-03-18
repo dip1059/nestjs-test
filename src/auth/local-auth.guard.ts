@@ -21,7 +21,7 @@ export class LocalAuthGuard extends AuthGuard('local') {
 export class LoginInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler) {
     const response = context.switchToHttp().getResponse<Response>();
-    //response.redirect('/logviewer');
+    //response.redirect('/logs');
     return next.handle();
   }
 }

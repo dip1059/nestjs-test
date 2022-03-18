@@ -44,6 +44,6 @@ export class NoAuthGuardFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const status = exception.getStatus();
 
-    response.status(status).redirect('/logviewer');
+    response.status(status).redirect('/logs');
   }
 }

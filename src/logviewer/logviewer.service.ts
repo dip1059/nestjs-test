@@ -4,13 +4,17 @@ import * as fs from 'fs';
 @Injectable()
 export class LogviewerService {
   getLogs(file?: string) {
+    const initFile = file;
     file = './storage/logs/' + file;
     let logs: object[];
     if (!fs.existsSync(file)) return logs;
     const logFile = file || 'debug.log';
     try {
       let logData = fs.readFileSync(logFile).toString();
-      if (logData !== '') {
+      if (initFile == 'deploy.log') {
+        logs = [];
+        logs.push({ message: logData });
+      } else if (logData !== '') {
         logData = logData.slice(0, logData.length - 2);
         logData = `[${logData}]`;
         logs = JSON.parse(logData);

@@ -23,11 +23,15 @@ hbs.registerHelper('__', function (key: string) {
 hbs.registerHelper('trans', function (key: string) {
   return __(key);
 });
+
+hbs.registerHelper('eq', function (a, b) {
+  return a === b;
+});
 // hbs.registerPartial('pp', 'partial value');
 
 @UseGuards(AuthenticatedGuard)
 @UseFilters(AuthGuardFilter)
-@Controller('logviewer')
+@Controller('logs')
 export class LogviewerController {
   constructor(private readonly logviewerService: LogviewerService) {}
 
@@ -52,15 +56,15 @@ export class LogviewerController {
 
   @Get('clean-file')
   cleanFile(@Query('file') file: string, @Res() res) {
-    if (!file) return res.redirect('/logviewer');
+    if (!file) return res.redirect('/logs');
     this.logviewerService.cleanFile(file);
-    return res.redirect('/logviewer?file=' + file);
+    return res.redirect('/logs?file=' + file);
   }
 
   @Get('delete-file')
   deleteFile(@Query('file') file: string, @Res() res) {
-    if (!file) return res.redirect('/logviewer');
+    if (!file) return res.redirect('/logs');
     this.logviewerService.deleteFile(file);
-    return res.redirect('/logviewer');
+    return res.redirect('/logs');
   }
 }

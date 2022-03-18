@@ -44,7 +44,7 @@
       <div class="col-2 scroll" style="margin-top: 110px;">
         <ul>
           {{#each fileList}}
-          <li class="pt-2"><a href="/logviewer?file={{ this }}">{{ this }}</a></li>
+          <li class="pt-2"><a href="/logs?file={{ this }}">{{ this }}</a></li>
           {{/each}}
         </ul>
       </div>
@@ -72,7 +72,15 @@
               <td width="20%">
                 <script>document.write(new Date('{{ this.time }}').toLocaleString());</script>
               </td>
-              <td>{{ this.level }}</td>
+              {{#if (eq this.level 'error')}}
+              <td><span class="badge bg-danger">{{ this.level }}</span></td>
+              {{else if (eq this.level 'warn')}}
+              <td><span class="badge bg-warning">{{ this.level }}</span></td>
+              {{else if (eq this.level 'debug')}}
+              <td><span class="badge bg-primary">{{ this.level }}</span></td>
+              {{else}}
+              <td>{{this.level}}</td>
+              {{/if}}
               <td>{{ this.fileInfo }}</td>
               <td width="50%">{{ this.message }}</td>
             </tr>
@@ -99,12 +107,12 @@
 
     function cleanFile(file) {
       let r = confirm(`Are you sure? You want to clean "${file}"?`);
-      if (r) location.href = '/logviewer/clean-file?file=' + '{{ file }}';
+      if (r) location.href = '/logs/clean-file?file=' + '{{ file }}';
     }
 
     function deleteFile(file) {
       let r = confirm(`Are you sure? You want to delete "${file}"?`);
-      if (r) location.href = '/logviewer/delete-file?file=' + '{{ file }}';
+      if (r) location.href = '/logs/delete-file?file=' + '{{ file }}';
     }
   </script>
 
