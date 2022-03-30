@@ -1,5 +1,8 @@
+import { Console } from 'console';
 import * as fs from 'fs';
 import { basename } from 'path';
+
+export const newConsole = new Console(process.stdout);
 
 let logChannel: string;
 let logStdout: NodeJS.WriteStream & { fd: 1 };
@@ -76,25 +79,7 @@ async function log(
     : LOG_FILE_STREAM,
   ...optionalParams: any[]
 ) {
-  if (logChannel === LOG_CHANNEL_DAILY && logFile === 'debug.log') {
-    logFile = `${new Date().toISOString().split('T')[0]}_${logFile}`;
-  }
-
-  // fs.writeFileSync('./storage/logs/debug.log', `\n`, {
-  //   flag: 'a',
-  // });
-
-  const logFilePath = `./storage/logs/${logFile}`;
-
   try {
-    if (writeStream == LOG_STDOUT_STREAM) {
-      logStdout.write(message);
-      logStdout.write('\n');
-      return;
-    }
-    if (skipMessages(message)) return;
-    if (skipLevels(level)) return;
-
     //finding file name and line
     const i = optionalParams[0] || 2;
     const fileNline = basename(
@@ -102,6 +87,34 @@ async function log(
     ).split(':');
     const fileInfo = `${fileNline[0]}:${fileNline[1]}`;
     //
+
+    if (typeof message !== 'string') {
+      if (process.env.APP_DEBUG == 'true' && process.env.APP_ENV == 'local')
+        newConsole.log(message);
+      else
+        newConsole.error(
+          `${fileInfo}-> you are trying to write an object in log. Please remove.`,
+        );
+      return;
+    }
+
+    if (logChannel === LOG_CHANNEL_DAILY && logFile === 'debug.log') {
+      logFile = `${new Date().toISOString().split('T')[0]}_${logFile}`;
+    }
+
+    // fs.writeFileSync('./storage/logs/debug.log', `\n`, {
+    //   flag: 'a',
+    // });
+
+    const logFilePath = `./storage/logs/${logFile}`;
+
+    if (writeStream == LOG_STDOUT_STREAM) {
+      logStdout.write(message);
+      logStdout.write('\n');
+      return;
+    }
+    if (skipMessages(message)) return;
+    if (skipLevels(level)) return;
 
     const logObj = {
       id: +new Date() /*current timestamp number*/,
@@ -150,6 +163,10 @@ function skipMessages(message: string): boolean {
     message.search(
       /\[session-file-store] will retry, error on last attempt: Error: ENOENT: no such file or directory, open/,
     ) >= 0
+  ) {
+    return true;
+  } else if (
+    message.search(/\[session-file-store] Deleting expired sessions/) >= 0
   ) {
     return true;
   }
