@@ -52,7 +52,7 @@ async function warn(message: string, ...optionalParams: any[]) {
   try {
     log(message, LOG_LEVEL_WARN);
   } catch (error) {
-    logCatch(message);
+    newConsole.error(message);
     logCatch(error.stack);
   }
 }
@@ -61,9 +61,9 @@ async function warn(message: string, ...optionalParams: any[]) {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function error(message: string, ...optionalParams: any[]) {
   try {
-    log(message + optionalParams, LOG_LEVEL_ERROR);
+    log(message, LOG_LEVEL_ERROR);
   } catch (error) {
-    logCatch(message);
+    newConsole.error(message);
     logCatch(error.stack);
   }
 }
@@ -143,19 +143,23 @@ async function log(
 }
 
 function logCatch(message: any) {
-  let logFile = 'debug.log';
-  if (logChannel === LOG_CHANNEL_DAILY) {
-    logFile = `${new Date().toISOString().split('T')[0]}_${logFile}`;
+  try {
+    let logFile = 'debug.log';
+    if (logChannel === LOG_CHANNEL_DAILY) {
+      logFile = `${new Date().toISOString().split('T')[0]}_${logFile}`;
+    }
+    const logFilePath = `./storage/logs/${logFile}`;
+    const log = {
+      id: +new Date() /*current timestamp number*/,
+      time: new Date(),
+      level: LOG_LEVEL_ERROR,
+      fileInfo: `${basename(__filename)}:logCatch`,
+      message: message,
+    };
+    fs.writeFileSync(logFilePath, JSON.stringify(log) + ',\n', { flag: 'a' });
+  } catch (e) {
+    newConsole.error(e);
   }
-  const logFilePath = `./storage/logs/${logFile}`;
-  const log = {
-    id: +new Date() /*current timestamp number*/,
-    time: new Date(),
-    level: LOG_LEVEL_ERROR,
-    fileInfo: `${basename(__filename)}:logCatch`,
-    message: message,
-  };
-  fs.writeFileSync(logFilePath, JSON.stringify(log) + ',\n', { flag: 'a' });
 }
 
 function skipMessages(message: string): boolean {
