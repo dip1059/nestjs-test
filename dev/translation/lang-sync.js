@@ -6,22 +6,17 @@ const lang = require('./langfile-processing');
 let newKeys = [];
 global.count = 0;
 
-let srcFiles = glob.sync('./src/**/*');
+let srcFiles = glob.sync('./pages/**/*');
 srcFiles.forEach((file) => {
-  newKeys = lang.collectLangKeys(file, newKeys);
+  newKeys = lang.collectLangKeys(file, newKeys, 't');
 });
 
-let viewFiles = glob.sync('./resources/views/**/*');
+let viewFiles = glob.sync('./sections/**/*');
 viewFiles.forEach((file) => {
-  newKeys = lang.collectLangKeys(file, newKeys);
+  newKeys = lang.collectLangKeys(file, newKeys, 't');
 });
 
-viewFiles = glob.sync('./resources/views/**/*');
-viewFiles.forEach((file) => {
-  newKeys = lang.collectLangKeys(file, newKeys, 'trans');
-});
-
-let langFiles = glob.sync('./resources/lang/*.json');
+let langFiles = glob.sync('./locales/*.json');
 langFiles.forEach((file) => {
   lang.writeLangfile(file, newKeys);
 });

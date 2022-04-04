@@ -19,19 +19,19 @@ function collectLangKeys(file, newKeys = [], funcSignature = '__') {
       } else {
         dataArr = [
           ...data.matchAll(
-            new RegExp(`${funcSignature}\\([\\'|\\"](.*?)[\\'|\\"]\\)`, 'g'),
+            new RegExp(`[{'|\\" |\\' ]${funcSignature}\\([\\'|\\"](.*?)[\\'|\\"]\\)`, 'g'),
           ),
         ];
-        dataArr = dataArr.concat([
+        /* dataArr = dataArr.concat([
           ...data.matchAll(
-            new RegExp(`${funcSignature} [\\'|\\"](.*?)[\\'|\\"] `, 'g'),
+            new RegExp(`${funcSignature}([\\'|\\"](.*?)[\\'|\\"])`, 'g'),
           ),
-        ]);
-        dataArr = dataArr.concat([
+        ]); */
+        /* dataArr = dataArr.concat([
           ...data.matchAll(
             new RegExp(`${funcSignature} [\\'|\\"](.*?)[\\'|\\"]\\}`, 'g'),
           ),
-        ]);
+        ]); */
       }
 
       for (let i = 0; i < dataArr.length; i++) {
