@@ -11,6 +11,9 @@ function collectLangKeys(file, newKeys = [], funcSignature = '__') {
       if (funcSignature === '__') {
         dataArr = [...data.matchAll(/\_\_\([\'|\"](.*?)[\'|\"]\)/g)];
         dataArr = dataArr.concat([
+          ...data.matchAll(/\_\_\(\n +[\'|\"](.*?)[\'|\"]\n +\)/g),   //for new line and space
+        ]);
+        dataArr = dataArr.concat([
           ...data.matchAll(/\_\_ [\'|\"](.*?)[\'|\"] /g),
         ]);
         dataArr = dataArr.concat([
@@ -22,6 +25,11 @@ function collectLangKeys(file, newKeys = [], funcSignature = '__') {
             new RegExp(`[{'|\\" |\\' ]${funcSignature}\\([\\'|\\"](.*?)[\\'|\\"]\\)`, 'g'),
           ),
         ];
+        dataArr = dataArr.concat([
+          ...data.matchAll(
+            new RegExp(`[{'|\\" |\\' ]${funcSignature}\\(\\n +[\\'|\\"](.*?)[\\'|\\"]\\n +\\)`, 'g'),    //for new line and space
+          ),
+        ]);
         /* dataArr = dataArr.concat([
           ...data.matchAll(
             new RegExp(`${funcSignature}([\\'|\\"](.*?)[\\'|\\"])`, 'g'),
@@ -85,3 +93,4 @@ async function writeLangfile(file, newKeys = []) {
 }
 
 module.exports = { collectLangKeys, writeLangfile };
+
