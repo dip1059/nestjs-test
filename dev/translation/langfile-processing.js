@@ -76,6 +76,8 @@ async function writeLangfile(file, newKeys = []) {
       newKeys.forEach((elem) => {
         let found = false;
         for (key in langKeys) {
+          elem = elem.replace(/"$/, '');
+          elem = elem.replace(/'$/, '');
           if (key === elem) {
             found = true;
             break;
