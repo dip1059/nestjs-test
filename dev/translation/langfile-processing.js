@@ -78,7 +78,7 @@ async function writeLangfile(file, newKeys = []) {
         }
         if (!found) {
           global.count++;
-          langKeys[elem] = '';
+          langKeys[elem] = elem;
         }
       });
     }
