@@ -12,8 +12,14 @@ export class LogviewerService {
     try {
       let logData = fs.readFileSync(logFile).toString();
       if (initFile == 'deploy.log') {
-        logs = [];
-        logs.push({ message: logData });
+        try {
+          JSON.parse(logData);
+          logData = `[${logData}]`;
+          logs = JSON.parse(logData);
+        } catch (e) {
+          logs = [];
+          logs.push({ message: logData });
+        }
       } else if (logData !== '') {
         logData = logData.slice(0, logData.length - 2);
         logData = `[${logData}]`;
