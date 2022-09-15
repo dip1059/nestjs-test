@@ -50,7 +50,7 @@ function collectLangKeys(file, newKeys = [], funcSignature = '__') {
       }
 
       for (let i = 0; i < dataArr.length; i++) {
-        newKeys.push(dataArr[i][1]);
+        dataArr[i][1] && newKeys.push(dataArr[i][1]);
       }
       return newKeys;
     }
