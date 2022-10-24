@@ -11,6 +11,11 @@ srcFiles.forEach((file) => {
   newKeys = lang.collectLangKeys(file, newKeys);
 });
 
+srcFiles = glob.sync('./src/**/*');
+srcFiles.forEach((file) => {
+  newKeys = lang.collectLangKeys(file, newKeys, 'fakeTrans);
+});
+
 let viewFiles = glob.sync('./resources/views/**/*');
 viewFiles.forEach((file) => {
   newKeys = lang.collectLangKeys(file, newKeys);
