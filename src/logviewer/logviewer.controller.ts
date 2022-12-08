@@ -6,16 +6,18 @@ import {
   Res,
   UseGuards,
   UseFilters,
+  StreamableFile,
 } from '@nestjs/common';
 import { LogviewerService } from './logviewer.service';
 import * as glob from 'glob';
 import { basename } from 'path';
 import * as hbs from 'hbs';
-import { __ } from 'src/helpers/helpers';
+import { Request, Response } from 'express';
 import {
   AuthenticatedGuard,
   AuthGuardFilter,
 } from 'src/auth/authenticated.guard';
+import { __ } from 'src/helpers/helpers';
 
 hbs.registerHelper('__', function (key: string) {
   return __(key);
@@ -23,7 +25,6 @@ hbs.registerHelper('__', function (key: string) {
 hbs.registerHelper('trans', function (key: string) {
   return __(key);
 });
-
 hbs.registerHelper('eq', function (a, b) {
   return a === b;
 });
@@ -31,6 +32,7 @@ hbs.registerHelper('eq', function (a, b) {
 
 @UseGuards(AuthenticatedGuard)
 @UseFilters(AuthGuardFilter)
+// @SkipThrottle()
 @Controller('logs')
 export class LogviewerController {
   constructor(private readonly logviewerService: LogviewerService) {}
@@ -59,6 +61,20 @@ export class LogviewerController {
     if (!file) return res.redirect('/logs');
     this.logviewerService.cleanFile(file);
     return res.redirect('/logs?file=' + file);
+  }
+
+  @Get('download-file')
+  downloadFile(
+    @Query('file') file: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    try {
+      const streamFile = this.logviewerService.downloadFile(file);
+      res.attachment(file);
+      return new StreamableFile(streamFile);
+    } catch (e) {
+      return e.message;
+    }
   }
 
   @Get('delete-file')

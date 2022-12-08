@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
 
@@ -27,7 +28,7 @@ export class LogviewerService {
       }
     } catch (error) {
       fs.writeFileSync(logFile, '');
-      console.log(error.toString());
+      console.error(error.stack);
     }
     return logs;
   }
@@ -36,6 +37,17 @@ export class LogviewerService {
     file = './storage/logs/' + file;
     if (fs.existsSync(file)) fs.writeFileSync(file, '');
     return;
+  }
+
+  downloadFile(file: string) {
+    if (!file) {
+      throw new Error('No file requested!');
+    }
+    file = './storage/logs/' + file;
+    if (!fs.existsSync(file)) {
+      throw new Error('File does not exist!');
+    }
+    return fs.createReadStream(file);
   }
 
   deleteFile(file: string) {

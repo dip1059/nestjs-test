@@ -11,13 +11,14 @@
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
   <link href="/css/jquery.dataTables.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet">
 
   <style>
     .scroll {
-      width: 300px;
+      width: 350px;
       height: 500px;
       background-color: ghostwhite;
-      overflow-x: hidden;
+      overflow-x: auto;
       overflow-y: auto;
       text-align: justify;
     }
@@ -44,15 +45,27 @@
       <div class="col-2 scroll" style="margin-top: 110px;">
         <ul>
           {{#each fileList}}
-          <li class="pt-2"><a href="/logs?file={{ this }}">{{ this }}</a></li>
+          <li class="pt-2">
+            <a href="/logs?file={{ this }}">{{ this }}</a>&nbsp;
+            <a href="/logs/download-file?file={{this}}" style="color: black;" target="_blank" title="Download File">
+              <i class="fa fa-download"></i>
+            </a>&nbsp;
+            <a href="javascript:" onclick="cleanFile('{{this}}')" style="color: #ffc107;" title="Clean File">
+              <i class="fa fa-broom"></i>
+            </a>&nbsp;
+            <a href="javascript:" style="color: red;" onclick="deleteFile('{{this}}')" title="Delete File">
+              <i class="fa fa-trash"></i>
+            </a>
+          </li>
           {{/each}}
         </ul>
       </div>
       <div class="col-8">
         {{#if file}}
         <div class="row mb-5">
-          <a href="" class="col-1 btn btn-success m-2">Reload</a>
-          <a href="javascript:" onclick="cleanFile('{{ file }}')" class="col-1 btn btn-warning m-2">Clean File</a>
+          <a href="" class="col-1 btn btn-success m-2" style="width: 120px;">Reload</a>
+          <a href="/logs/download-file?file={{file}}" target="_blank" style="width: 120px;" class="col-1 btn btn-dark m-2">Download</a>
+          <a href="javascript:" onclick="cleanFile('{{ file }}')" style="width: 120px;" class="col-1 btn btn-warning m-2">Clean File</a>
           <a href="javascript:" style="width: 120px;" onclick="deleteFile('{{ file }}')"
             class="col-1 btn btn-danger m-2">Delete File</a>
         </div>
@@ -107,12 +120,12 @@
 
     function cleanFile(file) {
       let r = confirm(`Are you sure? You want to clean "${file}"?`);
-      if (r) location.href = '/logs/clean-file?file=' + '{{ file }}';
+      if (r) location.href = `/logs/clean-file?file=${file}`;
     }
 
     function deleteFile(file) {
       let r = confirm(`Are you sure? You want to delete "${file}"?`);
-      if (r) location.href = '/logs/delete-file?file=' + '{{ file }}';
+      if (r) location.href = `/logs/delete-file?file=${file}`;
     }
   </script>
 
