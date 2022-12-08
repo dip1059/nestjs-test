@@ -13,7 +13,7 @@ srcFiles.forEach((file) => {
 
 srcFiles = glob.sync('./src/**/*');
 srcFiles.forEach((file) => {
-  newKeys = lang.collectLangKeys(file, newKeys, 'fakeTrans);
+  newKeys = lang.collectLangKeys(file, newKeys, 'fakeTrans');
 });
 
 let viewFiles = glob.sync('./resources/views/**/*');
