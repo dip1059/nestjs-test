@@ -7,27 +7,30 @@ const lang = require('./langfile-processing');
 let newKeys = [];
 global.count = 0;
 
-let srcFiles = glob.sync('./src/**/*');
+const srcFiles = glob.sync('./src/**/*');
 srcFiles.forEach((file) => {
   newKeys = lang.collectLangKeys(file, newKeys);
 });
 
-srcFiles = glob.sync('./src/**/*');
 srcFiles.forEach((file) => {
   newKeys = lang.collectLangKeys(file, newKeys, 'fakeTrans');
 });
 
-let viewFiles = glob.sync('./resources/views/**/*');
+const seedFiles = glob.sync('./prisma/seeds/**/*');
+seedFiles.forEach((file) => {
+  newKeys = lang.collectLangKeys(file, newKeys);
+});
+
+const viewFiles = glob.sync('./resources/views/**/*');
 viewFiles.forEach((file) => {
   newKeys = lang.collectLangKeys(file, newKeys);
 });
 
-viewFiles = glob.sync('./resources/views/**/*');
 viewFiles.forEach((file) => {
   newKeys = lang.collectLangKeys(file, newKeys, 'trans');
 });
 
-let langFiles = glob.sync('./resources/lang/*.json');
+const langFiles = glob.sync('./resources/lang/*.json');
 langFiles.forEach((file) => {
   lang.writeLangfile(file, newKeys);
 });
@@ -59,4 +62,5 @@ console.log(`${global.count} new keys added.`);
 //     });
 //   }
 // });
+
 
