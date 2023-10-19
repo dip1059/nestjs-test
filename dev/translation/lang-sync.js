@@ -52,7 +52,7 @@ let langFiles = glob.sync('./locales/**/*.json');
 langFiles.forEach((file) => {
   lang.writeLangfile(file, newKeys);
 });
-if(!langFiles.length) console.log('No language file found. Create locales/en/common.json.');
+if(!langFiles.length) console.log(`No language file found. Create your lang files (ex: en/common.json, es/common.json ) in 'locales/'.`);
 console.log(`${global.count} new keys added.`);
 
 
